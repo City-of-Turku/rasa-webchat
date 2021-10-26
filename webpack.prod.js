@@ -42,7 +42,11 @@ module.exports = [{
           {
             loader: 'sass-loader',
             options: {
-              includePaths: [path.resolve(__dirname, 'src/scss/')]
+              // eslint-disable-next-line global-require, import/no-extraneous-dependencies
+              implementation: require('sass'),
+              sassOptions: {
+                includePaths: [path.resolve(__dirname, 'src/scss/')]
+              }
             }
           }
         ]
@@ -112,7 +116,11 @@ module.exports = [{
           {
             loader: 'sass-loader',
             options: {
-              includePaths: [path.resolve(__dirname, 'src/scss/')]
+              // eslint-disable-next-line global-require, import/no-extraneous-dependencies
+              implementation: require('sass'),
+              sassOptions: {
+                includePaths: [path.resolve(__dirname, 'src/scss/')]
+              }
             }
           }
         ]
