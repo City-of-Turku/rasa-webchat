@@ -9,7 +9,7 @@ import LocalStorageMock from '../../../../mocks/localStorageMock';
 
 const localStorage = new LocalStorageMock();
 const store = initStore('dummy', 'dummy', localStorage);
-jest.useFakeTimers();
+jest.useFakeTimers('legacy');
 
 describe('Messages metadata affect store', () => {
   const profile = assetMock;
