@@ -19,7 +19,8 @@ module.exports = {
     contentBase: path.resolve(__dirname, '/lib')
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    fallback: { path: require.resolve('path-browserify') }
   },
   mode: 'development',
   devtool: 'eval-source-map',
