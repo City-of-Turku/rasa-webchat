@@ -9,7 +9,6 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "webpack-dev-server --config webpack.dev.js",
-    "dev2": "webpack --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "test": "jest",
     "prepare": "npm run build",
