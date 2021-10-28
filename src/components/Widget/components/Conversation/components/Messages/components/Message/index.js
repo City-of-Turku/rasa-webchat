@@ -44,14 +44,14 @@ class Message extends PureComponent {
           {sender === 'response' ? (
             <ReactMarkdown
               className={'rw-markdown'}
-              source={text}
+              children={text}
               linkTarget={(url) => {
                 if (!url.startsWith('mailto') && !url.startsWith('javascript')) return '_blank';
                 return undefined;
               }}
               transformLinkUri={null}
-              renderers={{
-                link: props =>
+              components={{
+                link: ({node, ...props}) =>
                   docViewer ? (
                     <DocViewer src={props.href}>{props.children}</DocViewer>
                   ) : (
