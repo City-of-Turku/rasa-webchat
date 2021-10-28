@@ -5,7 +5,7 @@ module.exports = {
     "browser": true,
     "jest": true
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
@@ -15,12 +15,14 @@ module.exports = {
   },
   "plugins": [
     "react",
-    "flowtype"
+    "flowtype",
+    "prettier"
   ],
   "extends": [
     "eslint:recommended",
     "airbnb",
     "plugin:react/recommended",
+    "prettier" // Make sure this is the last
   ],
   "globals": {
     "__DEV__": true,
