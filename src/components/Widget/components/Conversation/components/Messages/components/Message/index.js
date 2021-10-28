@@ -51,7 +51,7 @@ class Message extends PureComponent {
               }}
               transformLinkUri={null}
               renderers={{
-                link: props =>
+                link: ({node, ...props}) =>
                   docViewer ? (
                     <DocViewer src={props.href}>{props.children}</DocViewer>
                   ) : (
