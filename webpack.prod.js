@@ -58,9 +58,7 @@ module.exports = [{
       },
       {
         test: /\.(jpg|png|gif|svg|woff|ttf|eot)$/,
-        use: {
-          loader: 'url-loader'
-        }
+        type: 'asset/inline'
       }
     ]
   },
@@ -133,9 +131,7 @@ module.exports = [{
       },
       {
         test: /\.(jpg|png|gif|svg|woff|ttf|eot)$/,
-        use: {
-          loader: 'url-loader'
-        }
+        type: 'asset/inline'
       }
     ]
   },
