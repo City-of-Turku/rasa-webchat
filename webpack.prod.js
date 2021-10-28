@@ -15,7 +15,8 @@ module.exports = [{
     libraryTarget: 'umd'
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    fallback: { path: require.resolve('path-browserify') }
   },
   mode: 'production',
   module: {
@@ -57,9 +58,7 @@ module.exports = [{
       },
       {
         test: /\.(jpg|png|gif|svg|woff|ttf|eot)$/,
-        use: {
-          loader: 'url-loader'
-        }
+        type: 'asset/inline'
       }
     ]
   },
@@ -89,7 +88,8 @@ module.exports = [{
     libraryTarget: 'umd'
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    fallback: { path: require.resolve('path-browserify') }
   },
   mode: 'production',
   module: {
@@ -131,9 +131,7 @@ module.exports = [{
       },
       {
         test: /\.(jpg|png|gif|svg|woff|ttf|eot)$/,
-        use: {
-          loader: 'url-loader'
-        }
+        type: 'asset/inline'
       }
     ]
   },
