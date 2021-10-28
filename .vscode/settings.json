@@ -1,9 +1,5 @@
 {
-    "prettier.singleQuote": true,
-    "prettier.jsxBracketSameLine": true,
-    "prettier.jsxSingleQuote": true,
-    "eslint.enable": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    }
+  "eslint.enable": true,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"]
 }
