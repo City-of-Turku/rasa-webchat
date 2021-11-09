@@ -12,7 +12,8 @@
     "build": "webpack --config webpack.prod.js",
     "test": "jest",
     "prepare": "npm run build",
-    "release": "standard-version"
+    "release": "standard-version",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "react",
