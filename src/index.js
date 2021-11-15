@@ -121,7 +121,9 @@ const ConnectedWidget = forwardRef((props, ref) => {
           userTextColor: props.userTextColor,
           userBackgroundColor: props.userBackgroundColor,
           assistTextColor: props.assistTextColor,
-          assistBackgoundColor: props.assistBackgoundColor }}
+          assistBackgoundColor: props.assistBackgoundColor,
+          showCarouselImages: props.showCarouselImages
+        }}
       >
         <Widget
           ref={ref}
@@ -208,7 +210,8 @@ ConnectedWidget.propTypes = {
   userTextColor: PropTypes.string,
   userBackgroundColor: PropTypes.string,
   assistTextColor: PropTypes.string,
-  assistBackgoundColor: PropTypes.string
+  assistBackgoundColor: PropTypes.string,
+  showCarouselImages: PropTypes.bool
 };
 
 ConnectedWidget.defaultProps = {
@@ -254,7 +257,8 @@ ConnectedWidget.defaultProps = {
   userTextColor: '',
   userBackgroundColor: '',
   assistTextColor: '',
-  assistBackgoundColor: ''
+  assistBackgoundColor: '',
+  showCarouselImages: true
 };
 
 export default ConnectedWidget;

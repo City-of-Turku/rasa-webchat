@@ -22,7 +22,7 @@ const Carousel = (props) => {
   };
 
   // TODO: Use main color as the color of carousel arrows
-  const { mainColor, assistTextColor } = useContext(ThemeContext);
+  const { mainColor, assistTextColor, showCarouselImages } = useContext(ThemeContext);
   const { linkTarget } = props;
 
   return (
@@ -77,7 +77,7 @@ const Carousel = (props) => {
             : null;
         return (
           <div key={index} className='rw-carousel-card'>
-            <a
+            {showCarouselImages && (<a
               href={defaultActionUrl}
               target={linkTarget || '_blank'}
               rel='noopener noreferrer'
@@ -91,7 +91,7 @@ const Carousel = (props) => {
               ) : (
                 <div className='rw-carousel-card-image' />
               )}
-            </a>
+            </a>)}
             <a
               className='rw-carousel-card-title'
               href={defaultActionUrl}
@@ -153,6 +153,7 @@ Carousel.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   chooseReply: PropTypes.func.isRequired,
   linkTarget: PropTypes.string,
+  showCarouselImages: PropTypes.bool
 };
 
 const mapStateToProps = (state) => ({

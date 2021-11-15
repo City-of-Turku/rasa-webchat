@@ -6,7 +6,8 @@ const ThemeContext = React.createContext({
   userTextColor: '',
   userBackgroundColor: '',
   assistTextColor: '',
-  assistBackgoundColor: ''
+  assistBackgoundColor: '',
+  showCarouselImages: true
 });
 
 export default ThemeContext;
