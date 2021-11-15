@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, shallow, mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
 
 import { createCarousel } from 'helper';
@@ -72,18 +72,11 @@ describe('</Carousel />', () => {
   );
 
   it('should render a Carousel component and buttons and default actions', () => {
-    // console.log(messagesComponent.debug());
-    const shallowCarousel = messagesComponent.find('.rw-carousel-container');
-    expect(shallowCarousel).toHaveLength(1);
+    expect(messagesComponent.find('.rw-carousel-container')).toHaveLength(1);
 
     expect(messagesComponent.find('.rw-carousel-card')).toHaveLength(3);
-    // expect(messagesComponent.render().find('a[href^="https://google"]')).toHaveLength(3);
-    
-    // expect(messagesComponent.render().find('.rw-reply')).toHaveLength(3);
-    expect(messagesComponent.find('.rw-reply')).toHaveLength(3);
-
     expect(messagesComponent.find('a[href^="https://google"]')).toHaveLength(3);
-
-    expect(messagesComponent.render().find('.rw-reply[href^="https://facebook"]')).toHaveLength(1);
+    expect(messagesComponent.find('.rw-reply')).toHaveLength(3);
+    expect(messagesComponent.find('.rw-reply[href^="https://facebook"]')).toHaveLength(1);
   });
 });
