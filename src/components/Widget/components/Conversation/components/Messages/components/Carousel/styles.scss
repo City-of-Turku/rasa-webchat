@@ -3,29 +3,32 @@
 
 .#{$namespace}carousel-container {
     // @include message-bubble($grey-2, #000);
-    //max-height: 345px;
     min-height: 345px;
-    padding-bottom: 10px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    white-space: nowrap;
+    margin-bottom: 8px;
+    // overflow-x: hidden;
+    // overflow-y: hidden;
+    /* white-space: nowrap;
     padding-left: 5px;
     padding-right: 0;
     margin-top: 8px;
-    position: relative;
+    position: relative;  */
+    margin-bottom: 8px;
     display: flex;
-
+    position: relative;
+    width: 100%;
+        
     .#{$namespace}carousel-card {
-        display: inline-block;
-        max-width: 220px;
-        width: 220px;
-        min-width: 220px;
-        min-height: 324px;
-        margin: 3px 13px 3px 1px;
         box-shadow: 4px 2px 12px 1px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        // max-width: 1.5 * $card-width;
+        // width: $card-width;
+        // min-width: $card-width;
+        min-height: 324px;
         border-radius: 8px;
         overflow: hidden;
         position: relative;
+        margin: 3px 13px 3px 1px;
+        height: 100%;
 
         .#{$namespace}carousel-card-image {
             width: 100%;
@@ -64,6 +67,7 @@
         .#{$namespace}carousel-buttons-container {
             margin-bottom: 1.5rem;
             width: 100%;
+            height: auto;
             .#{$namespace}reply {
                 min-height: 21px;
                 margin: 5px 10px;
@@ -80,7 +84,16 @@
     }
 }
 
-.#{$namespace}carousel-arrows-container {
+.#{$namespace}carousel-arrow {
+    cursor: pointer;
+    box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.35);
+    &:hover {
+        box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.2);
+        // top: calc(40% - 3px);
+    }
+}
+
+/* .#{$namespace}carousel-arrows-container {
     max-height: 345px;
     height: 345px;
     width: 100%;
@@ -128,4 +141,4 @@
             transform: rotate(180deg);
         }
     }
-}
+} */
