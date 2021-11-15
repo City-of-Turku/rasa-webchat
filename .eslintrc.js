@@ -25,7 +25,7 @@ module.exports = {
     __DEV__: true,
   },
   rules: {
-    'comma-dangle': ['error', 'never'],
+    'comma-dangle': ['error', 'only-multiline'],
     'no-invalid-this': 'off',
     'no-return-assign': 'off',
     'no-param-reassign': 'off',
