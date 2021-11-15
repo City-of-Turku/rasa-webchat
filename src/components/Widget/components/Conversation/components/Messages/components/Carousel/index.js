@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { addUserMessage, emitUserMessage } from 'actions';
 import { PROP_TYPES } from 'constants';
 
+// eslint-disable-next-line import/no-named-default
 import { default as NukaCarousel } from 'nuka-carousel';
 
 import ThemeContext from '../../../../../../ThemeContext';
@@ -30,7 +31,7 @@ const Carousel = (props) => {
       heightMode='max'
       swiping
       disableEdgeSwiping
-      initialSlideHeight={324}
+      initialSlideHeight={345}
       // cellSpacing={14}
       slideWidth="220px"
       defaultControlsConfig={{
@@ -126,16 +127,15 @@ const Carousel = (props) => {
                 }
                 // TODO: Use button instead of div
                 return (
-                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                  <div
+                  <button
+                    type='button'
                     key={buttonIndex}
                     className='rw-reply'
                     onClick={() => handleClick(button)}
-                    role='button'
                     tabIndex={0}
                     style={{ borderColor: mainColor, color: mainColor }}>
                     <span>{button.title}</span>
-                  </div>
+                  </button>
                 );
               })}
             </div>
