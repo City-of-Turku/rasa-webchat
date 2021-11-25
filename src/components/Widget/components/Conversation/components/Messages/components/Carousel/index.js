@@ -75,11 +75,12 @@ const Carousel = (props) => {
           carouselCard.default_action && carouselCard.default_action.type === 'web_url'
             ? carouselCard.default_action.url
             : null;
+        const cardTarget = carouselCard.metadata ? carouselCard.metadata.linkTarget : undefined;
         return (
           <div key={index} className='rw-carousel-card'>
             {showCarouselImages && (<a
               href={defaultActionUrl}
-              target={linkTarget || '_blank'}
+              target={linkTarget || cardTarget || '_blank'}
               rel='noopener noreferrer'
               onClick={() => handleClick(carouselCard.default_action)}>
               {carouselCard.image_url ? (
@@ -95,7 +96,7 @@ const Carousel = (props) => {
             <a
               className='rw-carousel-card-title'
               href={defaultActionUrl}
-              target={linkTarget || '_blank'}
+              target={cardTarget || linkTarget || '_blank'}
               rel='noopener noreferrer'
               onClick={() => handleClick(carouselCard.default_action)}
               style={{ color: assistTextColor }}>
@@ -104,7 +105,7 @@ const Carousel = (props) => {
             <a
               className='rw-carousel-card-subtitle'
               href={defaultActionUrl}
-              target={linkTarget || '_blank'}
+              target={cardTarget || linkTarget || '_blank'}
               rel='noopener noreferrer'
               onClick={() => handleClick(carouselCard.default_action)}
               style={{ color: assistTextColor }}>
@@ -117,7 +118,7 @@ const Carousel = (props) => {
                     <a
                       key={buttonIndex}
                       href={button.url}
-                      target={linkTarget || '_blank'}
+                      target={cardTarget || linkTarget || '_blank'}
                       rel='noopener noreferrer'
                       className='rw-reply'
                       style={{ borderColor: mainColor, color: mainColor }}>
