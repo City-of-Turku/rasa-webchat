@@ -80,7 +80,7 @@ const Carousel = (props) => {
           <div key={index} className='rw-carousel-card'>
             {showCarouselImages && (<a
               href={defaultActionUrl}
-              target={linkTarget || cardTarget || '_blank'}
+              target={cardTarget || linkTarget || '_blank'}
               rel='noopener noreferrer'
               onClick={() => handleClick(carouselCard.default_action)}>
               {carouselCard.image_url ? (
