@@ -38,6 +38,7 @@ import { SESSION_NAME, NEXT_MESSAGE } from 'constants';
 import { isVideo, isImage, isButtons, isText, isCarousel } from './msgProcessor';
 import WidgetLayout from './layout';
 import { storeLocalSession, getLocalSession } from '../../store/reducers/helper';
+import socket from '../../socket';
 
 class Widget extends Component {
   constructor(props) {
@@ -48,6 +49,7 @@ class Widget extends Component {
     this.onGoingMessageDelay = false;
     this.sendMessage = this.sendMessage.bind(this);
     this.getSessionId = this.getSessionId.bind(this);
+    this.updateSocketCustomData = this.updateSocketCustomData.bind(this);
     this.intervalId = null;
     this.eventListenerCleaner = () => { };
   }
@@ -118,8 +120,16 @@ class Widget extends Component {
     return localId;
   }
 
+  updateSocketCustomData (data) {
+    const { socket } = this.props;
+    if (socket) {
+      socket.updateSocketCustomData(data);
+    }
+  }
+
   sendMessage(payload, text = '', when = 'always', tooltipSelector = false) {
     const { dispatch, initialized, messages } = this.props;
+    console.log('AT sendMessage, payload = ', payload);
     const emit = () => {
       const send = () => {
         dispatch(emitUserMessage(payload));
@@ -489,6 +499,7 @@ class Widget extends Component {
 
       if (!sessionId) return;
 
+      console.log('WE ARE AT trySendTooltipPayload');
       socket.emit('user_uttered', { message: tooltipPayload, customData, session_id: sessionId });
 
       dispatch(triggerTooltipSent(tooltipPayload));
