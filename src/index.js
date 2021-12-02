@@ -44,10 +44,6 @@ const ConnectedWidget = forwardRef((props, ref) => {
 
     emit(message, data) {
       if (this.socket) {
-        // TODO: Remove debug console logs
-        console.log('SOCKET: Sending message', message);
-        console.log('SOCKET: Sending data', data);
-        console.log('current customData is ', this.customData);
         this.socket.emit(message, data);
       }
     }
@@ -60,11 +56,7 @@ const ConnectedWidget = forwardRef((props, ref) => {
 
     updateSocketCustomData(data) {
       if (this.socket) {
-        // TODO: Remove debug console logs
-        console.log('Custom data now: ', this.customData);
-        console.log('Update customData with: ', data);
         this.customData = { ...this.customData, ...data };
-        console.log('Update customData', this.customData);
       }
     }
 

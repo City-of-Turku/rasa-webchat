@@ -129,7 +129,6 @@ class Widget extends Component {
 
   sendMessage(payload, text = '', when = 'always', tooltipSelector = false) {
     const { dispatch, initialized, messages } = this.props;
-    console.log('AT sendMessage, payload = ', payload);
     const emit = () => {
       const send = () => {
         dispatch(emitUserMessage(payload));
@@ -499,7 +498,6 @@ class Widget extends Component {
 
       if (!sessionId) return;
 
-      console.log('WE ARE AT trySendTooltipPayload');
       socket.emit('user_uttered', { message: tooltipPayload, customData, session_id: sessionId });
 
       dispatch(triggerTooltipSent(tooltipPayload));
