@@ -7,10 +7,13 @@ import { PROP_TYPES } from 'constants';
 
 // eslint-disable-next-line import/no-named-default
 import { default as NukaCarousel } from 'nuka-carousel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { useElementSize } from 'usehooks-ts'
 
 import ThemeContext from '../../../../../../ThemeContext';
 import './styles.scss';
- 
+
 const Carousel = (props) => {
   const { message } = props;
   const carousel = message.toJS();
@@ -21,52 +24,75 @@ const Carousel = (props) => {
     chooseReply(action.payload, action.title);
   };
 
-  // TODO: Use main color as the color of carousel arrows
-  const { mainColor, assistTextColor, showCarouselImages } = useContext(ThemeContext);
+  const { mainColor, assistTextColor, userBackgroundColor, showCarouselImages } =
+    useContext(ThemeContext);
   const { linkTarget } = props;
 
+  const CARD_WIDTH = 220;
+  const [carouselRef, { width, height }] = useElementSize();
+
+  /**
+   * Calculates whether there are still new slides on right that are not visible
+   * in the container. Used to hide/show next slide -arrow.
+   * @param {*} currentId Id of the "current slide" (0-based indexing)
+   * @param {*} slideCount Number of slides in the caraousel
+   */
+  const isLastCardVisible = (currentId, slideCount) => {
+    if (width === 0) return false;
+    const slidesLeft = slideCount - currentId;
+    return (slidesLeft * CARD_WIDTH - 10) <= width;
+  };
+
+  /**
+   * Calculate how many slides can be shown at once based on container size
+   */
+  const slidesToShow = () => {
+    if (width === 0) return undefined;
+    return width / CARD_WIDTH;
+  };
+
   return (
-    <div className='rw-carousel-container'>
+    <div className='rw-carousel-container' ref={carouselRef}>
     <NukaCarousel
       heightMode='max'
       swiping
       disableEdgeSwiping
-      initialSlideHeight={345}
-      // cellSpacing={14}
-      slideWidth="220px"
+      scrollMode='remainder'
+      slideWidth={`${CARD_WIDTH}px`}
+      slidesToShow={slidesToShow()}
       defaultControlsConfig={{
         pagingDotsStyle: {
-          fill: mainColor
+          fill: mainColor,
         },
-        prevButtonClassName: "rw-left-arrow"
-        /*
-        nextButtonClassName: PropTypes.string,
-        nextButtonStyle: PropTypes.object,
-        nextButtonText: PropTypes.string,
-        prevButtonClassName: PropTypes.string,
-        prevButtonStyle: PropTypes.object,
-        prevButtonText: PropTypes.string,
-        pagingDotsContainerClassName: PropTypes.string,
-        pagingDotsClassName: PropTypes.string,
-        pagingDotsStyle: PropTypes.object
-        */
+        prevButtonClassName: 'rw-left-arrow',
       }}
-      /* renderBottomLeftControls={({ previousSlide }) => (
-        <button
-          type='button'
-          className='rw-carousel-arrow'
-          onClick={previousSlide}
-        >Previous</button>
-      )}
-      renderBottomRightControls={({ nextSlide }) => (
-        <button
-          type='button'
-          onClick={nextSlide}
-        >Next</button>
-      )}
       // Remove default buttons
       renderCenterLeftControls={null}
-      renderCenterRightControls={null} */
+      renderCenterRightControls={null}
+      // Custom controls
+      renderBottomLeftControls={({ previousSlide, currentSlide }) =>
+        currentSlide === 0 ? null : (
+          <button
+            type='button'
+            onClick={previousSlide}
+            className='rw-carousel-arrow arrow-prev'
+            style={{ backgroundColor: userBackgroundColor }}>
+            <FontAwesomeIcon icon={faAngleLeft} color={mainColor} />
+          </button>
+        )
+      }
+      renderBottomRightControls={({ nextSlide, currentSlide, slideCount }) =>
+        isLastCardVisible(currentSlide, slideCount) ? null : (
+          <button
+            type='button'
+            onClick={nextSlide}
+            className='rw-carousel-arrow arrow-next'
+            style={{ backgroundColor: userBackgroundColor }}>
+            <FontAwesomeIcon icon={faAngleRight} color={mainColor} />
+          </button>
+        )
+      }
+      
       // Remove control dots:
       renderBottomCenterControls={null}
     >
@@ -78,7 +104,8 @@ const Carousel = (props) => {
         const cardTarget = carouselCard.metadata ? carouselCard.metadata.linkTarget : undefined;
         return (
           <div key={index} className='rw-carousel-card'>
-            {showCarouselImages && (<a
+            {showCarouselImages && ( // Theme property showCarouselImages determines whether images are shown
+            <a
               href={defaultActionUrl}
               target={cardTarget || linkTarget || '_blank'}
               rel='noopener noreferrer'
@@ -92,25 +119,18 @@ const Carousel = (props) => {
               ) : (
                 <div className='rw-carousel-card-image' />
               )}
-            </a>)}
-            <a
+            </a>
+            )}
+            <h1
               className='rw-carousel-card-title'
-              href={defaultActionUrl}
-              target={cardTarget || linkTarget || '_blank'}
-              rel='noopener noreferrer'
-              onClick={() => handleClick(carouselCard.default_action)}
               style={{ color: assistTextColor }}>
               {carouselCard.title}
-            </a>
-            <a
+            </h1>
+            <p
               className='rw-carousel-card-subtitle'
-              href={defaultActionUrl}
-              target={cardTarget || linkTarget || '_blank'}
-              rel='noopener noreferrer'
-              onClick={() => handleClick(carouselCard.default_action)}
               style={{ color: assistTextColor }}>
               {carouselCard.subtitle}
-            </a>
+            </p>
             <div className='rw-carousel-buttons-container'>
               {carouselCard.buttons.map((button, buttonIndex) => {
                 if (button.type === 'web_url') {
@@ -126,7 +146,6 @@ const Carousel = (props) => {
                     </a>
                   );
                 }
-                // TODO: Use button instead of div
                 return (
                   <button
                     type='button'
@@ -154,7 +173,6 @@ Carousel.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   chooseReply: PropTypes.func.isRequired,
   linkTarget: PropTypes.string,
-  showCarouselImages: PropTypes.bool
 };
 
 const mapStateToProps = (state) => ({

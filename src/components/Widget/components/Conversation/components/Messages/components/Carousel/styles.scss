@@ -2,33 +2,21 @@
 @import 'common.scss';
 
 .#{$namespace}carousel-container {
-    // @include message-bubble($grey-2, #000);
-    min-height: 345px;
-    margin-bottom: 8px;
-    // overflow-x: hidden;
-    // overflow-y: hidden;
-    /* white-space: nowrap;
-    padding-left: 5px;
-    padding-right: 0;
-    margin-top: 8px;
-    position: relative;  */
-    margin-bottom: 8px;
-    display: flex;
+    height: 355px; // Space below 50px
+    margin-top: 10px;
     position: relative;
     width: 100%;
-        
+
     .#{$namespace}carousel-card {
         box-shadow: 4px 2px 12px 1px rgba(0, 0, 0, 0.1);
         display: inline-block;
-        // max-width: 1.5 * $card-width;
-        // width: $card-width;
-        // min-width: $card-width;
-        min-height: 324px;
+        width: $card-width - 10px;
+        height: 305px;
         border-radius: 8px;
         overflow: hidden;
         position: relative;
-        margin: 3px 13px 3px 1px;
-        height: 100%;
+        margin: 3px 9px 23px 1px;
+        // height: 100%;
 
         .#{$namespace}carousel-card-image {
             width: 100%;
@@ -68,12 +56,14 @@
             margin-bottom: 1.5rem;
             width: 100%;
             height: auto;
+
             .#{$namespace}reply {
                 min-height: 21px;
                 margin: 5px 10px;
                 font-size: 0.9em;
                 justify-content: center;
                 outline: none;
+
                 span {
                     white-space: nowrap;
                     text-overflow: ellipsis;
@@ -84,61 +74,35 @@
     }
 }
 
+
+
 .#{$namespace}carousel-arrow {
     cursor: pointer;
     box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.35);
+
     &:hover {
         box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.2);
         // top: calc(40% - 3px);
     }
+
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    margin-bottom: 10px;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .svg-inline--fa {}
+
+    &.arrow-next {
+        margin-right: 10px;
+    }
+
+    &.arrow-prev {
+        margin-left: 10px;
+    }
 }
-
-/* .#{$namespace}carousel-arrows-container {
-    max-height: 345px;
-    height: 345px;
-    width: 100%;
-    padding-left: -12px;
-    padding-right: 0;
-    margin-top: 8px;
-    position: absolute;
-    pointer-events: none;
-
-    .#{$namespace}carousel-arrow {
-        pointer-events: initial;
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        background-color: white;
-        top: 40%;
-        border-radius: 11px;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-        box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.35);
-        &:hover {
-            box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.2);
-            top: calc(40% - 3px);
-        }
-        &:active {
-            box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.3);
-            top: calc(40% - 2px);
-        }
-        outline: none;
-        img.#{$namespace}arrow {
-            position: absolute;
-            height: 100%;
-            left: 3px;
-        }
-    }
-
-
-    .#{$namespace}left-arrow {
-        left: 10px;
-    }
-
-    .#{$namespace}right-arrow {
-        right: 10px;
-        div.#{$namespace}arrow {
-            transform: rotate(180deg);
-        }
-    }
-} */

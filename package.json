@@ -22,11 +22,14 @@
     "javascript"
   ],
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
     "@popperjs/core": "^2.4.0",
     "@stomp/stompjs": "^5.4.2",
     "html-webpack-plugin": "^5.5.0",
     "immutable": "^3.8.2",
-    "nuka-carousel": "^4.8.2",
+    "nuka-carousel": "^4.8.3",
     "object-hash": "^1.1.5",
     "path-browserify": "^1.0.1",
     "prop-types": "^15.7.2",
@@ -40,7 +43,8 @@
     "slick-carousel": "^1.8.1",
     "socket.io": "^3.1.2",
     "socket.io-client": "^3.1.2",
-    "sockjs-client": "^1.4.0"
+    "sockjs-client": "^1.4.0",
+    "usehooks-ts": "^2.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
