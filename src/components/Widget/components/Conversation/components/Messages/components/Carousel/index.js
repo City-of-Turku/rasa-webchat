@@ -9,7 +9,7 @@ import { PROP_TYPES } from 'constants';
 import { default as NukaCarousel } from 'nuka-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import { useElementSize } from 'usehooks-ts'
+import { useElementSize } from 'usehooks-ts';
 
 import ThemeContext from '../../../../../../ThemeContext';
 import './styles.scss';
@@ -18,15 +18,22 @@ const Carousel = (props) => {
   const { message } = props;
   const carousel = message.toJS();
 
+  const { linkTarget } = props;
   const handleClick = (action) => {
     if (!action || action.type !== 'postback') return;
     const { chooseReply } = props;
     chooseReply(action.payload, action.title);
   };
 
-  const { mainColor, assistTextColor, userBackgroundColor, showCarouselImages } =
-    useContext(ThemeContext);
-  const { linkTarget } = props;
+  const {
+    showCarouselImages,
+    carouselCardsBackground,
+    carouselCardsTextColor,
+    carouselCardsButtonBackground,
+    carouselCardsButtonText,
+    carouselControlsBackground,
+    carouselControlsIconColor,
+  } = useContext(ThemeContext);
 
   const CARD_WIDTH = 220;
   const [carouselRef, { width, height }] = useElementSize();
@@ -40,7 +47,7 @@ const Carousel = (props) => {
   const isLastCardVisible = (currentId, slideCount) => {
     if (width === 0) return false;
     const slidesLeft = slideCount - currentId;
-    return (slidesLeft * CARD_WIDTH - 10) <= width;
+    return slidesLeft * CARD_WIDTH - 10 <= width;
   };
 
   /**
@@ -54,18 +61,11 @@ const Carousel = (props) => {
   return (
     <div className='rw-carousel-container' ref={carouselRef}>
     <NukaCarousel
-      heightMode='max'
       swiping
       disableEdgeSwiping
       scrollMode='remainder'
       slideWidth={`${CARD_WIDTH}px`}
       slidesToShow={slidesToShow()}
-      defaultControlsConfig={{
-        pagingDotsStyle: {
-          fill: mainColor,
-        },
-        prevButtonClassName: 'rw-left-arrow',
-      }}
       // Remove default buttons
       renderCenterLeftControls={null}
       renderCenterRightControls={null}
@@ -76,8 +76,10 @@ const Carousel = (props) => {
             type='button'
             onClick={previousSlide}
             className='rw-carousel-arrow arrow-prev'
-            style={{ backgroundColor: userBackgroundColor }}>
-            <FontAwesomeIcon icon={faAngleLeft} color={mainColor} />
+            style={{
+              backgroundColor: carouselControlsBackground,
+            }}>
+            <FontAwesomeIcon icon={faAngleLeft} color={carouselControlsIconColor} />
           </button>
         )
       }
@@ -87,15 +89,15 @@ const Carousel = (props) => {
             type='button'
             onClick={nextSlide}
             className='rw-carousel-arrow arrow-next'
-            style={{ backgroundColor: userBackgroundColor }}>
-            <FontAwesomeIcon icon={faAngleRight} color={mainColor} />
+            style={{
+              backgroundColor: carouselControlsBackground,
+            }}>
+            <FontAwesomeIcon icon={faAngleRight} color={carouselControlsIconColor} />
           </button>
         )
       }
-      
       // Remove control dots:
-      renderBottomCenterControls={null}
-    >
+      renderBottomCenterControls={null}>
       {carousel.elements.map((carouselCard, index) => {
         const defaultActionUrl =
           carouselCard.default_action && carouselCard.default_action.type === 'web_url'
@@ -103,32 +105,31 @@ const Carousel = (props) => {
             : null;
         const cardTarget = carouselCard.metadata ? carouselCard.metadata.linkTarget : undefined;
         return (
-          <div key={index} className='rw-carousel-card'>
+          <div
+            key={index}
+            className='rw-carousel-card'
+            style={{ backgroundColor: carouselCardsBackground, height: `${height - 40}px` }}>
             {showCarouselImages && ( // Theme property showCarouselImages determines whether images are shown
-            <a
-              href={defaultActionUrl}
-              target={cardTarget || linkTarget || '_blank'}
-              rel='noopener noreferrer'
-              onClick={() => handleClick(carouselCard.default_action)}>
-              {carouselCard.image_url ? (
-                <img
-                  className='rw-carousel-card-image'
-                  src={carouselCard.image_url}
-                  alt={`${carouselCard.title} ${carouselCard.subtitle}}}`}
-                />
-              ) : (
-                <div className='rw-carousel-card-image' />
-              )}
-            </a>
+              <a
+                href={defaultActionUrl}
+                target={cardTarget || linkTarget || '_blank'}
+                rel='noopener noreferrer'
+                onClick={() => handleClick(carouselCard.default_action)}>
+                {carouselCard.image_url ? (
+                  <img
+                    className='rw-carousel-card-image'
+                    src={carouselCard.image_url}
+                    alt={`${carouselCard.title} ${carouselCard.subtitle}}}`}
+                  />
+                ) : (
+                  <div className='rw-carousel-card-image' />
+                )}
+              </a>
             )}
-            <h1
-              className='rw-carousel-card-title'
-              style={{ color: assistTextColor }}>
+            <h1 className='rw-carousel-card-title' style={{ color: carouselCardsTextColor }}>
               {carouselCard.title}
             </h1>
-            <p
-              className='rw-carousel-card-subtitle'
-              style={{ color: assistTextColor }}>
+            <p className='rw-carousel-card-subtitle' style={{ color: carouselCardsTextColor }}>
               {carouselCard.subtitle}
             </p>
             <div className='rw-carousel-buttons-container'>
@@ -141,7 +142,11 @@ const Carousel = (props) => {
                       target={cardTarget || linkTarget || '_blank'}
                       rel='noopener noreferrer'
                       className='rw-reply'
-                      style={{ borderColor: mainColor, color: mainColor }}>
+                      style={{
+                        borderColor: carouselCardsButtonText,
+                        color: carouselCardsButtonText,
+                        backgroundColor: carouselCardsButtonBackground,
+                      }}>
                       <span>{button.title}</span>
                     </a>
                   );
@@ -153,7 +158,11 @@ const Carousel = (props) => {
                     className='rw-reply'
                     onClick={() => handleClick(button)}
                     tabIndex={0}
-                    style={{ borderColor: mainColor, color: mainColor }}>
+                    style={{
+                      borderColor: carouselCardsButtonText,
+                      color: carouselCardsButtonText,
+                      backgroundColor: carouselCardsButtonBackground,
+                    }}>
                     <span>{button.title}</span>
                   </button>
                 );
@@ -183,7 +192,7 @@ const mapDispatchToProps = (dispatch) => ({
   chooseReply: (payload, title) => {
     if (title) dispatch(addUserMessage(title));
     dispatch(emitUserMessage(payload));
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Carousel);

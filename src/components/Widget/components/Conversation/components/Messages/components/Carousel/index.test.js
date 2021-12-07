@@ -8,7 +8,6 @@ import { List } from 'immutable';
 import Messages from '../../index';
 import { initStore } from '../../../../../../../../store/store';
 import LocalStorageMock from '../../../../../../../../../mocks/localStorageMock';
-import Carousel from './index';
 
 describe('</Carousel />', () => {
   const carousel = createCarousel(
@@ -75,7 +74,7 @@ describe('</Carousel />', () => {
     expect(messagesComponent.find('.rw-carousel-container')).toHaveLength(1);
 
     expect(messagesComponent.find('.rw-carousel-card')).toHaveLength(3);
-    expect(messagesComponent.find('a[href^="https://google"]')).toHaveLength(3);
+    expect(messagesComponent.find('a[href^="https://google"]')).toHaveLength(1);
     expect(messagesComponent.find('.rw-reply')).toHaveLength(3);
     expect(messagesComponent.find('.rw-reply[href^="https://facebook"]')).toHaveLength(1);
   });
