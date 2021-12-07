@@ -36,7 +36,9 @@ const Carousel = (props) => {
   } = useContext(ThemeContext);
 
   const CARD_WIDTH = 220;
-  const [carouselRef, { width, height }] = useElementSize();
+  // Smaller cards if images are hidden
+  const CARD_HEIGHT = showCarouselImages ? 300 : 220;
+  const [carouselRef, { width }] = useElementSize();
 
   /**
    * Calculates whether there are still new slides on right that are not visible
@@ -59,119 +61,120 @@ const Carousel = (props) => {
   };
 
   return (
-    <div className='rw-carousel-container' ref={carouselRef}>
-    <NukaCarousel
-      swiping
-      disableEdgeSwiping
-      scrollMode='remainder'
-      slideWidth={`${CARD_WIDTH}px`}
-      slidesToShow={slidesToShow()}
-      // Remove default buttons
-      renderCenterLeftControls={null}
-      renderCenterRightControls={null}
-      // Custom controls
-      renderBottomLeftControls={({ previousSlide, currentSlide }) =>
-        currentSlide === 0 ? null : (
-          <button
-            type='button'
-            onClick={previousSlide}
-            className='rw-carousel-arrow arrow-prev'
-            style={{
-              backgroundColor: carouselControlsBackground,
-            }}>
-            <FontAwesomeIcon icon={faAngleLeft} color={carouselControlsIconColor} />
-          </button>
-        )
-      }
-      renderBottomRightControls={({ nextSlide, currentSlide, slideCount }) =>
-        isLastCardVisible(currentSlide, slideCount) ? null : (
-          <button
-            type='button'
-            onClick={nextSlide}
-            className='rw-carousel-arrow arrow-next'
-            style={{
-              backgroundColor: carouselControlsBackground,
-            }}>
-            <FontAwesomeIcon icon={faAngleRight} color={carouselControlsIconColor} />
-          </button>
-        )
-      }
-      // Remove control dots:
-      renderBottomCenterControls={null}>
-      {carousel.elements.map((carouselCard, index) => {
-        const defaultActionUrl =
-          carouselCard.default_action && carouselCard.default_action.type === 'web_url'
-            ? carouselCard.default_action.url
-            : null;
-        const cardTarget = carouselCard.metadata ? carouselCard.metadata.linkTarget : undefined;
-        return (
-          <div
-            key={index}
-            className='rw-carousel-card'
-            style={{ backgroundColor: carouselCardsBackground, height: `${height - 40}px` }}>
-            {showCarouselImages && ( // Theme property showCarouselImages determines whether images are shown
-              <a
-                href={defaultActionUrl}
-                target={cardTarget || linkTarget || '_blank'}
-                rel='noopener noreferrer'
-                onClick={() => handleClick(carouselCard.default_action)}>
-                {carouselCard.image_url ? (
-                  <img
-                    className='rw-carousel-card-image'
-                    src={carouselCard.image_url}
-                    alt={`${carouselCard.title} ${carouselCard.subtitle}}}`}
-                  />
-                ) : (
-                  <div className='rw-carousel-card-image' />
-                )}
-              </a>
-            )}
-            <h1 className='rw-carousel-card-title' style={{ color: carouselCardsTextColor }}>
-              {carouselCard.title}
-            </h1>
-            <p className='rw-carousel-card-subtitle' style={{ color: carouselCardsTextColor }}>
-              {carouselCard.subtitle}
-            </p>
-            <div className='rw-carousel-buttons-container'>
-              {carouselCard.buttons.map((button, buttonIndex) => {
-                if (button.type === 'web_url') {
+    <div className='rw-carousel-container' ref={carouselRef} style={{ minHeight: CARD_WIDTH }}>
+      <NukaCarousel
+        swiping
+        disableEdgeSwiping
+        scrollMode='remainder'
+        slideWidth={`${CARD_WIDTH}px`}
+        slidesToShow={slidesToShow()}
+        initialSlideHeight={CARD_HEIGHT}
+        // Remove default buttons
+        renderCenterLeftControls={null}
+        renderCenterRightControls={null}
+        // Custom controls
+        renderBottomLeftControls={({ previousSlide, currentSlide }) =>
+          currentSlide === 0 ? null : (
+            <button
+              type='button'
+              onClick={previousSlide}
+              className='rw-carousel-arrow arrow-prev'
+              style={{
+                backgroundColor: carouselControlsBackground,
+              }}>
+              <FontAwesomeIcon icon={faAngleLeft} color={carouselControlsIconColor} />
+            </button>
+          )
+        }
+        renderBottomRightControls={({ nextSlide, currentSlide, slideCount }) =>
+          isLastCardVisible(currentSlide, slideCount) ? null : (
+            <button
+              type='button'
+              onClick={nextSlide}
+              className='rw-carousel-arrow arrow-next'
+              style={{
+                backgroundColor: carouselControlsBackground,
+              }}>
+              <FontAwesomeIcon icon={faAngleRight} color={carouselControlsIconColor} />
+            </button>
+          )
+        }
+        // Remove control dots:
+        renderBottomCenterControls={null}>
+        {carousel.elements.map((carouselCard, index) => {
+          const defaultActionUrl =
+            carouselCard.default_action && carouselCard.default_action.type === 'web_url'
+              ? carouselCard.default_action.url
+              : null;
+          const cardTarget = carouselCard.metadata ? carouselCard.metadata.linkTarget : undefined;
+          return (
+            <div
+              key={index}
+              className='rw-carousel-card'
+              style={{ backgroundColor: carouselCardsBackground, height: `${CARD_HEIGHT}px` }}>
+              {showCarouselImages && ( // Theme property showCarouselImages determines whether images are shown
+                <a
+                  href={defaultActionUrl}
+                  target={cardTarget || linkTarget || '_blank'}
+                  rel='noopener noreferrer'
+                  onClick={() => handleClick(carouselCard.default_action)}>
+                  {carouselCard.image_url ? (
+                    <img
+                      className='rw-carousel-card-image'
+                      src={carouselCard.image_url}
+                      alt={`${carouselCard.title} ${carouselCard.subtitle}}}`}
+                    />
+                  ) : (
+                    <div className='rw-carousel-card-image' />
+                  )}
+                </a>
+              )}
+              <h1 className='rw-carousel-card-title' style={{ color: carouselCardsTextColor }}>
+                {carouselCard.title}
+              </h1>
+              <p className='rw-carousel-card-subtitle' style={{ color: carouselCardsTextColor }}>
+                {carouselCard.subtitle}
+              </p>
+              <div className='rw-carousel-buttons-container'>
+                {carouselCard.buttons.map((button, buttonIndex) => {
+                  if (button.type === 'web_url') {
+                    return (
+                      <a
+                        key={buttonIndex}
+                        href={button.url}
+                        target={cardTarget || linkTarget || '_blank'}
+                        rel='noopener noreferrer'
+                        className='rw-reply'
+                        style={{
+                          borderColor: carouselCardsButtonText,
+                          color: carouselCardsButtonText,
+                          backgroundColor: carouselCardsButtonBackground,
+                        }}>
+                        <span>{button.title}</span>
+                      </a>
+                    );
+                  }
                   return (
-                    <a
+                    <button
+                      type='button'
                       key={buttonIndex}
-                      href={button.url}
-                      target={cardTarget || linkTarget || '_blank'}
-                      rel='noopener noreferrer'
                       className='rw-reply'
+                      onClick={() => handleClick(button)}
+                      tabIndex={0}
                       style={{
                         borderColor: carouselCardsButtonText,
                         color: carouselCardsButtonText,
                         backgroundColor: carouselCardsButtonBackground,
                       }}>
                       <span>{button.title}</span>
-                    </a>
+                    </button>
                   );
-                }
-                return (
-                  <button
-                    type='button'
-                    key={buttonIndex}
-                    className='rw-reply'
-                    onClick={() => handleClick(button)}
-                    tabIndex={0}
-                    style={{
-                      borderColor: carouselCardsButtonText,
-                      color: carouselCardsButtonText,
-                      backgroundColor: carouselCardsButtonBackground,
-                    }}>
-                    <span>{button.title}</span>
-                  </button>
-                );
-              })}
+                })}
+              </div>
             </div>
-          </div>
-        );
-      })}
-    </NukaCarousel>
+          );
+        })}
+      </NukaCarousel>
     </div>
   );
 };

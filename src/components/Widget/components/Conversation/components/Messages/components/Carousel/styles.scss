@@ -2,111 +2,81 @@
 @import 'common.scss';
 
 .#{$namespace}carousel-container {
-    max-height: 375px;
-    // min-height: 305px;
-    min-height: 180px;
-    // height: auto;
-    margin-top: 10px;
+    min-height: $card-height;
+    margin-top: 0px;
     position: relative;
     width: 100%;
-    // display: inline-flex;
-    // display: flex;
-    // flex-direction: column;
     padding-bottom: 5px;
 
-    /* Carousel components:
-     *
-     * rw-carousel-container
-     *   slider
-     *      > slider-frame
-     *          > slider-list
-     *      > slider-control-bottomright ..
-     */
-
-    .slider {
-        // display: flex;
-        // flex-direction: column;
-        // height: 100% !important;
-        padding-bottom: 40px; // Or however much the bottom controls need...
-    }
-
-    .slider-list {
-        // height: 100% !important;
-        // height: auto !important;
-        // display: inline-flex;
-        // flex-direction: row;
-        // height: 100% !important;
-        // height: auto !important;
-        // display: inline-flex;
-        // height: inherit !important;
-        // height: max-content !important;
-        // max-height: 375px;
-
-        /* height: max-content !important;
-        align-items: stretch;
-        min-height: 265px;
-        display: flex !important;
-        align-content: stretch; */
-    }
-
     .slider-frame {
-        // padding-bottom: 30px;
-        // margin-bottom: 30px;
-        // height: 100% !important;
-
-        // padding-bottom: 40px !important;
-        padding-top: 5px !important;
-        padding-bottom: 15px !important;
-        // height: max-content !important;
-        // margin-bottom: 15px !important; // So box-shadow from cards doesn't get cut short
+        // So that box-shadow does not get "cut"
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
     }
 
     .slider-control-bottomright,
     .slider-control-bottomleft {
-        bottom: 0;
+        width: 50%;
+        position: relative !important;
+        height: 30px;
+        top: -2px;
     }
 
     .slider-control-bottomright {
-        right: 0;
+        float: right;
     }
 
     .slider-control-bottomleft {
-        left: 0;
+        float: left;
     }
 
-    .slider-slide {
-        // height: 100% !important;
-        // height: auto;
-        // padding-bottom: 15px !important;
-        // height: auto !important;
-        // height: calc(100% - 40px);
-        // flex-grow: 100%;
+    .#{$namespace}carousel-arrow {
+        cursor: pointer;
+        box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.35);
+
+        &:hover {
+            box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.2);
+        }
+
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 10px;
+        background: $tertiary;
+        color: white;
+        margin-bottom: 10px;
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+
+        &.arrow-next {
+            margin-right: 10px;
+            right: 0;
+        }
+
+        &.arrow-prev {
+            margin-left: 10px;
+            left: 0;
+        }
     }
 
     .#{$namespace}carousel-card {
         box-shadow: 4px 2px 12px 1px rgba(0, 0, 0, 0.1);
-        // display: inline-block;
         background-color: $white;
         display: flex;
-        // align-items: stretch;
         flex-direction: column;
         width: $card-width - 10px;
-        // max-height: 325px;
-        // min-height: 265px;
+        height: $card-height;
         border-radius: 8px;
         overflow: hidden;
         position: relative;
-        margin: 3px 9px 10px 1px;
-        // height: calc(100% - 50px);
-        // height: auto;
-        // height: auto;
-        // flex: 1 0 auto;
-        // height: 100%;
+        margin: 0px 9px 10px 1px;
 
         .#{$namespace}carousel-card-image {
             width: 100%;
-            min-height: 75px;
-            max-height: 120px;
+            height: 120px;
             width: $card-width - 9px;
             // display: block;
             // this is so that it's not empty while loading
@@ -149,12 +119,6 @@
             width: 100%;
             height: auto;
             margin-bottom: 10px;
-            // flex-grow: 1;
-            // bottom: 0;
-            // position: absolute;
-            /* position: relative;
-            top: 100%;
-            transform: translateY(-100%); */
 
             .#{$namespace}reply {
                 min-height: 21px;
@@ -170,37 +134,5 @@
                 }
             }
         }
-    }
-}
-
-
-
-.#{$namespace}carousel-arrow {
-    cursor: pointer;
-    box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.35);
-
-    &:hover {
-        box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.2);
-        // margin-bottom: 12px;
-    }
-
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 10px;
-    background: $tertiary;
-    color: white;
-    margin-bottom: 10px;
-    font-size: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &.arrow-next {
-        margin-right: 10px;
-    }
-
-    &.arrow-prev {
-        margin-left: 10px;
     }
 }
