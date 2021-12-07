@@ -5,7 +5,7 @@ import React, { useContext } from 'react';
 import ThemeContext from '../src/components/Widget/ThemeContext';
 
 function Arrow() {
-  const { assistBackgoundColor } = useContext(ThemeContext);
+  const { assistBackgroundColor } = useContext(ThemeContext);
 
   return (
     <svg
@@ -21,7 +21,7 @@ function Arrow() {
         <g transform="matrix(5.99661e-17,-0.957639,0.335797,2.41269e-17,4.64282,1609.73)">
           <path
             d="M439.982,1223.38L412.224,1146.67L384.467,1223.38"
-            style={{ fill: 'none', stroke: assistBackgoundColor !== '' ? assistBackgoundColor : 'rgb(107, 153, 255)', strokeWidth: '14.94px' }}
+            style={{ fill: 'none', stroke: assistBackgroundColor !== '' ? assistBackgroundColor : 'rgb(107, 153, 255)', strokeWidth: '14.94px' }}
           />
         </g>
       </g>

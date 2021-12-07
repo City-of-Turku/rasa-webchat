@@ -138,7 +138,7 @@ class Messages extends Component {
         </div>
       ));
     };
-    const { conversationBackgroundColor, assistBackgoundColor } = this.context;
+    const { conversationBackgroundColor, assistBackgroundColor } = this.context;
 
     return (
       <div id="rw-messages" style={{ backgroundColor: conversationBackgroundColor }} className="rw-messages-container">
@@ -149,7 +149,7 @@ class Messages extends Component {
               profileAvatar &&
               <img src={profileAvatar} className="rw-avatar" alt="profile" />
             }
-            <div style={{ backgroundColor: assistBackgoundColor }}className="rw-response">
+            <div style={{ backgroundColor: assistBackgroundColor }}className="rw-response">
               <div id="wave">
                 <span className="rw-dot" />
                 <span className="rw-dot" />

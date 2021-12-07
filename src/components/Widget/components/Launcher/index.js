@@ -12,12 +12,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import { MESSAGES_TYPES } from 'constants';
 import { Image, Message, Buttons } from 'messagesComponents';
 import { showTooltip as showTooltipAction, emitUserMessage} from 'actions';
-import { onRemove } from 'utils/dom';
+import { onRemove , safeQuerySelectorAll } from 'utils/dom';
 import openLauncher from 'assets/launcher_button.svg';
 import closeIcon from 'assets/clear-button-grey.svg';
 import close from 'assets/clear-button.svg';
 import Badge from './components/Badge';
-import { safeQuerySelectorAll } from 'utils/dom';
 import './style.scss';
 import ThemeContext from '../../ThemeContext';
 
@@ -37,7 +36,7 @@ const Launcher = ({
   domHighlight,
   sendPayload
 }) => {
-  const { mainColor, assistBackgoundColor } = useContext(ThemeContext);
+  const { mainColor, assistBackgroundColor } = useContext(ThemeContext);
 
   const [referenceElement, setReferenceElement] = useState(null);
 
@@ -145,7 +144,7 @@ const Launcher = ({
     ;
 
   const renderTooltipContent = () => (
-    <React.Fragment>
+    <>
       <div className="rw-tooltip-close">
         <button
           onClick={(e) => {
@@ -168,7 +167,7 @@ const Launcher = ({
       >
         {getComponentToRender(lastMessages[0], true)}
       </div>) : renderSequenceTooltip(lastMessages) }
-    </React.Fragment>
+    </>
   );
 
   const renderPlacedTooltip = () => (
@@ -189,9 +188,9 @@ const Launcher = ({
 
   const renderToolTip = () => (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div className="rw-tooltip-body" style={{ backgroundColor: assistBackgoundColor }} onClick={(e) => { e.stopPropagation(); }}>
+    <div className="rw-tooltip-body" style={{ backgroundColor: assistBackgroundColor }} onClick={(e) => { e.stopPropagation(); }}>
       {renderTooltipContent()}
-      <div className="rw-tooltip-decoration" style={{ backgroundColor: assistBackgoundColor }} />
+      <div className="rw-tooltip-decoration" style={{ backgroundColor: assistBackgroundColor }} />
     </div>
   );
 
