@@ -4,10 +4,18 @@ const ThemeContext = React.createContext({
   mainColor: '',
   conversationBackgroundColor: '',
   userTextColor: '',
+  // Background color for user's typed messages and response options
   userBackgroundColor: '',
   assistTextColor: '',
-  assistBackgoundColor: '',
-  showCarouselImages: true
+  assistBackgroundColor: '',
+  // To customize card carousels:
+  showCarouselImages: true,
+  carouselCardsBackground: '',
+  carouselCardsTextColor: '',
+  carouselCardsButtonBackground: '',
+  carouselCardsButtonText: '',
+  carouselControlsBackground: '',
+  carouselControlsIconColor: '',
 });
 
 export default ThemeContext;

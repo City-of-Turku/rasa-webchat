@@ -38,7 +38,6 @@ import { SESSION_NAME, NEXT_MESSAGE } from 'constants';
 import { isVideo, isImage, isButtons, isText, isCarousel } from './msgProcessor';
 import WidgetLayout from './layout';
 import { storeLocalSession, getLocalSession } from '../../store/reducers/helper';
-import socket from '../../socket';
 
 class Widget extends Component {
   constructor(props) {

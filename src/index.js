@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 
 import Widget from './components/Widget';
-import { initStore } from '../src/store/store';
+import { initStore } from './store/store';
 import socket from './socket';
-import ThemeContext from '../src/components/Widget/ThemeContext';
+import ThemeContext from './components/Widget/ThemeContext';
 // eslint-disable-next-line import/no-mutable-exports
 
 const ConnectedWidget = forwardRef((props, ref) => {
@@ -105,8 +105,7 @@ const ConnectedWidget = forwardRef((props, ref) => {
     instanceSocket.current = store.socket;
   }
 
-  const storage =
-    props.params.storage === 'session' ? sessionStorage : localStorage;
+  const storage = props.params.storage === 'session' ? sessionStorage : localStorage;
 
   if (!store || !store.current) {
     store.current = initStore(
@@ -122,15 +121,21 @@ const ConnectedWidget = forwardRef((props, ref) => {
   return (
     <Provider store={store.current}>
       <ThemeContext.Provider
-        value={{ mainColor: props.mainColor,
+        value={{
+          mainColor: props.mainColor,
           conversationBackgroundColor: props.conversationBackgroundColor,
           userTextColor: props.userTextColor,
           userBackgroundColor: props.userBackgroundColor,
           assistTextColor: props.assistTextColor,
-          assistBackgoundColor: props.assistBackgoundColor,
-          showCarouselImages: props.showCarouselImages
-        }}
-      >
+          assistBackgroundColor: props.assistBackgroundColor,
+          showCarouselImages: props.showCarouselImages,
+          carouselCardsBackground: props.carouselCardsBackground,
+          carouselCardsTextColor: props.carouselCardsTextColor,
+          carouselCardsButtonBackground: props.carouselCardsButtonBackground,
+          carouselCardsButtonText: props.carouselCardsButtonText,
+          carouselControlsBackground: props.carouselControlsBackground,
+          carouselControlsIconColor: props.carouselControlsIconColor,
+        }}>
         <Widget
           ref={ref}
           initPayload={props.initPayload}
@@ -206,18 +211,25 @@ ConnectedWidget.propTypes = {
     onChatOpen: PropTypes.func,
     onChatClose: PropTypes.func,
     onChatVisible: PropTypes.func,
-    onChatHidden: PropTypes.func
+    onChatHidden: PropTypes.func,
   }),
   disableTooltips: PropTypes.bool,
   defaultHighlightCss: PropTypes.string,
   defaultHighlightAnimation: PropTypes.string,
+  defaultHighlightClassname: PropTypes.string,
   mainColor: PropTypes.string,
   conversationBackgroundColor: PropTypes.string,
   userTextColor: PropTypes.string,
   userBackgroundColor: PropTypes.string,
   assistTextColor: PropTypes.string,
-  assistBackgoundColor: PropTypes.string,
-  showCarouselImages: PropTypes.bool
+  assistBackgroundColor: PropTypes.string,
+  showCarouselImages: PropTypes.bool,
+  carouselCardsBackground: PropTypes.string,
+  carouselCardsTextColor: PropTypes.string,
+  carouselCardsButtonBackground: PropTypes.string,
+  carouselCardsButtonText: PropTypes.string,
+  carouselControlsBackground: PropTypes.string,
+  carouselControlsIconColor: PropTypes.string,
 };
 
 ConnectedWidget.defaultProps = {
@@ -231,12 +243,13 @@ ConnectedWidget.defaultProps = {
   connectOn: 'mount',
   onSocketEvent: {},
   protocol: 'socketio',
+  // eslint-disable-next-line react/default-props-match-prop-types
   socketUrl: 'http://localhost',
   protocolOptions: {},
   badge: 0,
   embedded: false,
   params: {
-    storage: 'local'
+    storage: 'local',
   },
   docViewer: false,
   showCloseButton: true,
@@ -255,7 +268,7 @@ ConnectedWidget.defaultProps = {
     onChatOpen: () => {},
     onChatClose: () => {},
     onChatVisible: () => {},
-    onChatHidden: () => {}
+    onChatHidden: () => {},
   },
   disableTooltips: false,
   mainColor: '',
@@ -263,8 +276,14 @@ ConnectedWidget.defaultProps = {
   userTextColor: '',
   userBackgroundColor: '',
   assistTextColor: '',
-  assistBackgoundColor: '',
-  showCarouselImages: true
+  assistBackgroundColor: '',
+  showCarouselImages: true,
+  carouselCardsBackground: '',
+  carouselCardsTextColor: '',
+  carouselCardsButtonBackground: '',
+  carouselCardsButtonText: '',
+  carouselControlsBackground: '',
+  carouselControlsIconColor: '',
 };
 
 export default ConnectedWidget;
