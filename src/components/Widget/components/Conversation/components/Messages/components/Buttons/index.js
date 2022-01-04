@@ -62,7 +62,7 @@ class Buttons extends PureComponent {
                     href={reply.get('url')}
                     target={linkTarget || '_blank'}
                     rel="noopener noreferrer"
-                    className={'rw-reply'}
+                    className='rw-reply'
                     style={buttonStyle}
                     onMouseUp={e => e.stopPropagation()}
                   >
@@ -71,16 +71,16 @@ class Buttons extends PureComponent {
                 );
               }
               return (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <div
+                <button
+                  type='button'
                   key={index}
-                  className={'rw-reply'}
+                  className='rw-reply'
                   onClick={(e) => { e.stopPropagation(); this.handleClick(reply); }}
                   style={buttonStyle}
                   onMouseUp={e => e.stopPropagation()}
                 >
                   {reply.get('title')}
-                </div>
+                </button>
               );
             })}
           </div>
