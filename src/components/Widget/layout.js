@@ -60,12 +60,12 @@ const WidgetLayout = (props) => {
   ) : null;
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isChatVisible: state.behavior.get('isChatVisible'),
   isChatOpen: state.behavior.get('isChatOpen'),
   disabledInput: state.behavior.get('disabledInput'),
   connected: state.behavior.get('connected'),
-  connectingText: state.behavior.get('connectingText')
+  connectingText: state.behavior.get('connectingText'),
 });
 
 WidgetLayout.propTypes = {
@@ -93,7 +93,7 @@ WidgetLayout.propTypes = {
   customComponent: PropTypes.func,
   displayUnreadCount: PropTypes.bool,
   showMessageDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  tooltipPayload: PropTypes.string
+  tooltipPayload: PropTypes.string,
 };
 
 export default connect(mapStateToProps)(WidgetLayout);

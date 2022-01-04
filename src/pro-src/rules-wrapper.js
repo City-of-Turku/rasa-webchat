@@ -11,25 +11,29 @@ const RasaWebchatPro = React.memo(
     const updateRules = (newRules) => {
       if (newRules && widget && widget.current.sendMessage) {
         const handler =
-                    (window[RULES_HANDLER_SINGLETON] &&
-                        window[RULES_HANDLER_SINGLETON].updateRules(newRules)) ||
-                    new RulesHandler(
-                      newRules,
-                      widget.current.sendMessage,
-                      props.triggerEventListenerUpdateRate
-                    );
+          (window[RULES_HANDLER_SINGLETON] &&
+            window[RULES_HANDLER_SINGLETON].updateRules(newRules)) ||
+          new RulesHandler(
+            newRules,
+            widget.current.sendMessage,
+            props.triggerEventListenerUpdateRate
+          );
         handler.initHandler();
         // putting it in the window object lets us do the singleton design pattern
         window[RULES_HANDLER_SINGLETON] = handler;
       }
     };
 
-    useEffect(() => function cleanUp() {
-      const handler = window[RULES_HANDLER_SINGLETON];
-      if (handler && handler instanceof RulesHandler) {
-        handler.cleanUp(true);
-      }
-    }, []);
+    useEffect(
+      () =>
+        function cleanUp() {
+          const handler = window[RULES_HANDLER_SINGLETON];
+          if (handler && handler instanceof RulesHandler) {
+            handler.cleanUp(true);
+          }
+        },
+      []
+    );
 
     useImperativeHandle(ref, () => ({
       sendMessage: (...args) => {
@@ -38,7 +42,10 @@ const RasaWebchatPro = React.memo(
       updateRules: (rules) => {
         updateRules(rules);
       },
-      getSessionId: widget.current.getSessionId
+      getSessionId: widget.current.getSessionId,
+      updateSocketCustomData: (data) => {
+        widget.current.updateSocketCustomData(data);
+      },
     }));
 
     return <Widget ref={widget} {...{ ...props }} />;

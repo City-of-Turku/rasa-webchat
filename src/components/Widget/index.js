@@ -48,6 +48,7 @@ class Widget extends Component {
     this.onGoingMessageDelay = false;
     this.sendMessage = this.sendMessage.bind(this);
     this.getSessionId = this.getSessionId.bind(this);
+    this.updateSocketCustomData = this.updateSocketCustomData.bind(this);
     this.intervalId = null;
     this.eventListenerCleaner = () => { };
   }
@@ -116,6 +117,13 @@ class Widget extends Component {
     const localSession = getLocalSession(storage, SESSION_NAME);
     const localId = localSession ? localSession.session_id : null;
     return localId;
+  }
+
+  updateSocketCustomData (data) {
+    const { socket } = this.props;
+    if (socket) {
+      socket.updateSocketCustomData(data);
+    }
   }
 
   sendMessage(payload, text = '', when = 'always', tooltipSelector = false) {

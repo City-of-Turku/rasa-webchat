@@ -19,14 +19,14 @@ class Message extends PureComponent {
       customCss.css = customCss.css.replace(/^\./, '');
     }
 
-    const { userTextColor, userBackgroundColor, assistTextColor, assistBackgoundColor } = this.context;
+    const { userTextColor, userBackgroundColor, assistTextColor, assistBackgroundColor } = this.context;
     let style;
     if (sender === 'response' && customCss && customCss.style === 'class') {
       style = undefined;
     } else if (sender === 'response' && customCss && customCss.style) {
       style = { cssText: customCss.css };
     } else if (sender === 'response') {
-      style = { color: assistTextColor, backgroundColor: assistBackgoundColor };
+      style = { color: assistTextColor, backgroundColor: assistBackgroundColor };
     } else if (sender === 'client') {
       style = { color: userTextColor, backgroundColor: userBackgroundColor };
     }
@@ -43,7 +43,7 @@ class Message extends PureComponent {
         >
           {sender === 'response' ? (
             <ReactMarkdown
-              className={'rw-markdown'}
+              className="rw-markdown"
               children={text}
               linkTarget={(url) => {
                 if (!url.startsWith('mailto') && !url.startsWith('javascript')) return '_blank';
