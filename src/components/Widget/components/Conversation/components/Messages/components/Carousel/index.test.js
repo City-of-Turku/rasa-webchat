@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 
 import { createCarousel } from 'helper';
@@ -28,28 +28,28 @@ describe('</Carousel />', () => {
                 {
                   title: 'un dernier bouton',
                   type: 'web_url',
-                  url: 'https://facebook.com'
-                }
-              ]
+                  url: 'https://facebook.com',
+                },
+              ],
             },
             {
               title: 'test',
               subtitle: 'test',
               image_url: 'https://source.unsplash.com/random/330x300/?wine',
               default_action: null,
-              buttons: []
+              buttons: [],
             },
             {
               title: 'another test',
               subtitle: '',
               image_url: 'https://source.unsplash.com/random/400x400/?code',
               default_action: null,
-              buttons: []
-            }
-          ]
-        }
+              buttons: [],
+            },
+          ],
+        },
       },
-      text: 'undefined'
+      text: 'undefined',
     },
     'response'
   );
@@ -61,20 +61,21 @@ describe('</Carousel />', () => {
   const store = initStore('dummy', 'dummy', localStorage);
 
   store.dispatch({
-    type: 'CONNECT'
+    type: 'CONNECT',
   });
 
-  const messagesComponent = shallow(
+  const messagesComponent = mount(
     <Provider store={store}>
       <Messages.WrappedComponent messages={responseMessage} />
     </Provider>
   );
 
   it('should render a Carousel component and buttons and default actions', () => {
-    expect(messagesComponent.render().find('.rw-carousel-card')).toHaveLength(3);
-    expect(messagesComponent.render().find('a[href^="https://google"]')).toHaveLength(3);
-    expect(messagesComponent.render().find('.rw-reply')).toHaveLength(3);
+    expect(messagesComponent.find('.rw-carousel-container')).toHaveLength(1);
 
-    expect(messagesComponent.render().find('.rw-reply[href^="https://facebook"]')).toHaveLength(1);
+    expect(messagesComponent.find('.rw-carousel-card')).toHaveLength(3);
+    expect(messagesComponent.find('a[href^="https://google"]')).toHaveLength(1);
+    expect(messagesComponent.find('.rw-reply')).toHaveLength(3);
+    expect(messagesComponent.find('.rw-reply[href^="https://facebook"]')).toHaveLength(1);
   });
 });
