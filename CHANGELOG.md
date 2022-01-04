@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://https//github.com/botfront/rasa-webchat/compare/v1.0.1...v1.0.3) (2021-11-04)
+
+
+### Bug Fixes
+
+* bump webpack-dev-server to resolve cve from ansi-html ([8bbf9e0](https://https//github.com/botfront/rasa-webchat/commit/8bbf9e0a8c92f0615ac57e65c31a419779381640))
+* depracated jest config option ([3d83413](https://https//github.com/botfront/rasa-webchat/commit/3d8341369e74a8339ab10c74d6e0bf19d631f3a8))
+* depracated vscode eslint setting ([c813215](https://https//github.com/botfront/rasa-webchat/commit/c813215dce6c17b981fc3fe6ccb3e4ef79826474))
+* dot-prop cve by bumping commitlint module ([2add6d1](https://https//github.com/botfront/rasa-webchat/commit/2add6d10f0edf0166eb0850e2c792aa8e032c693))
+* parent selector not allowed on top level ([f9dcc07](https://https//github.com/botfront/rasa-webchat/commit/f9dcc07d73c9cc3545e68cc421c44449ad26943d))
+* remove script used to test webpack update ([9db3ce2](https://https//github.com/botfront/rasa-webchat/commit/9db3ce2ceffc155ddb6ec680c9a85dd2296e184d))
+* submit event did not bubble in react 17 ([72a1592](https://https//github.com/botfront/rasa-webchat/commit/72a15926a2af85560237aaf0fddc4ecee9b6a6fb))
+* use jest 27 and fix breaking change on fake timers ([d4f8145](https://https//github.com/botfront/rasa-webchat/commit/d4f81458c7a7ae17457087b0dce7a088f199cf07))
+* use webpack 5 and resolve now missing polyfill issue ([b757734](https://https//github.com/botfront/rasa-webchat/commit/b7577344e876bd115e8f5e6055ba84b1de88ef2a))
+* webpack config changes and process being undefined ([a4ffe7f](https://https//github.com/botfront/rasa-webchat/commit/a4ffe7f98e6b52e7c348db97d3f763dbf3d9a58a))
+
+### [1.0.2](https://https//github.com/botfront/rasa-webchat/compare/v1.0.1...v1.0.2) (2021-11-04)
+
+
+### Bug Fixes
+
+* bump webpack-dev-server to resolve cve from ansi-html ([8bbf9e0](https://https//github.com/botfront/rasa-webchat/commit/8bbf9e0a8c92f0615ac57e65c31a419779381640))
+* depracated jest config option ([3d83413](https://https//github.com/botfront/rasa-webchat/commit/3d8341369e74a8339ab10c74d6e0bf19d631f3a8))
+* depracated vscode eslint setting ([c813215](https://https//github.com/botfront/rasa-webchat/commit/c813215dce6c17b981fc3fe6ccb3e4ef79826474))
+* dot-prop cve by bumping commitlint module ([2add6d1](https://https//github.com/botfront/rasa-webchat/commit/2add6d10f0edf0166eb0850e2c792aa8e032c693))
+* parent selector not allowed on top level ([f9dcc07](https://https//github.com/botfront/rasa-webchat/commit/f9dcc07d73c9cc3545e68cc421c44449ad26943d))
+* remove script used to test webpack update ([9db3ce2](https://https//github.com/botfront/rasa-webchat/commit/9db3ce2ceffc155ddb6ec680c9a85dd2296e184d))
+* submit event did not bubble in react 17 ([72a1592](https://https//github.com/botfront/rasa-webchat/commit/72a15926a2af85560237aaf0fddc4ecee9b6a6fb))
+* use jest 27 and fix breaking change on fake timers ([d4f8145](https://https//github.com/botfront/rasa-webchat/commit/d4f81458c7a7ae17457087b0dce7a088f199cf07))
+* use webpack 5 and resolve now missing polyfill issue ([b757734](https://https//github.com/botfront/rasa-webchat/commit/b7577344e876bd115e8f5e6055ba84b1de88ef2a))
+* webpack config changes and process being undefined ([a4ffe7f](https://https//github.com/botfront/rasa-webchat/commit/a4ffe7f98e6b52e7c348db97d3f763dbf3d9a58a))
+
 ### [1.0.1](https://https///compare/v1.0.0...v1.0.1) (2021-04-15)
 
 
