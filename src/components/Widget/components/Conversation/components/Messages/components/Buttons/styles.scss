@@ -15,6 +15,12 @@
 
   .#{$namespace}reply {
     @include reply;
+
+    .trailing-icon {
+      margin-left: 6px;
+      font-size: 0.8rem;
+      align-self: center;
+    }
   }
 
   .#{$namespace}response {

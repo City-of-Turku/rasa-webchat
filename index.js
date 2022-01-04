@@ -127,6 +127,7 @@ export const rasaWebchatProTypes = {
   customComponent: PropTypes.func,
   displayUnreadCount: PropTypes.bool,
   showMessageDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  showIconsOnWeblinks: PropTypes.bool,
   showCarouselImages: PropTypes.bool,
   customMessageDelay: PropTypes.func,
   tooltipPayload: PropTypes.string,
@@ -190,6 +191,7 @@ export const rasaWebchatProDefaultTypes = {
   showFullScreenButton: false,
   displayUnreadCount: false,
   showMessageDate: false,
+  showIconsOnWeblinks: true,
   showCarouselImages: true,
   customMessageDelay: (message) => {
     let delay = message.length * 30;
