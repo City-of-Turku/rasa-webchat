@@ -19,4 +19,9 @@ window.requestAnimationFrame =
     setTimeout(callback, 0);
   };
 
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useLayoutEffect: jest.requireActual('react').useEffect,
+}));
+
 Enzyme.configure({ adapter: new Adapter() });
