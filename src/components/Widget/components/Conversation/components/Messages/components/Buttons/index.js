@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { PROP_TYPES } from 'constants';
 import { addUserMessage, emitUserMessage, setButtons, toggleInputDisabled } from 'actions';
 import Message from '../Message/index';
@@ -42,7 +44,7 @@ class Buttons extends PureComponent {
   renderButtons(message, buttons, persit) {
     const { isLast, linkTarget, separateButtons
     } = this.props;
-    const { userTextColor, userBackgroundColor } = this.context;
+    const { userTextColor, userBackgroundColor, showIconsOnWeblinks } = this.context;
     const buttonStyle = {
       color: userTextColor,
       backgroundColor: userBackgroundColor,
@@ -61,26 +63,28 @@ class Buttons extends PureComponent {
                     key={index}
                     href={reply.get('url')}
                     target={linkTarget || '_blank'}
-                    rel="noopener noreferrer"
-                    className={'rw-reply'}
+                    rel='noopener noreferrer'
+                    className='rw-reply'
                     style={buttonStyle}
-                    onMouseUp={e => e.stopPropagation()}
-                  >
+                    onMouseUp={(e) => e.stopPropagation()}>
                     {reply.get('title')}
+                    {showIconsOnWeblinks && (
+                      <FontAwesomeIcon className='trailing-icon' icon={faExternalLinkAlt} />
+                    )}
                   </a>
                 );
               }
               return (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <div
+                <button
+                  type='button'
                   key={index}
-                  className={'rw-reply'}
+                  className='rw-reply'
                   onClick={(e) => { e.stopPropagation(); this.handleClick(reply); }}
                   style={buttonStyle}
                   onMouseUp={e => e.stopPropagation()}
                 >
                   {reply.get('title')}
-                </div>
+                </button>
               );
             })}
           </div>
@@ -103,7 +107,8 @@ class Buttons extends PureComponent {
         return <Message message={message} />;
       }
       return this.renderButtons(message, buttons, false);
-    } else if (message.get('buttons') !== undefined) {
+    }
+    if (message.get('buttons') !== undefined) {
       const buttons = message.get('buttons');
       return this.renderButtons(message, buttons, true);
     }

@@ -47,7 +47,12 @@ describe('<Buttons />', () => {
 
   it('should render a quick reply with a link to google', () => {
     expect(buttonsComponent.find('a.rw-reply')).toHaveLength(1);
-    expect(buttonsComponent.find('a.rw-reply').html()).toEqual('google');
+    expect(buttonsComponent.find('a.rw-reply').text()).toEqual('google');
     expect(buttonsComponent.find('a.rw-reply').prop('href')).toEqual('http://www.google.ca');
+  });
+
+  it('web urls should have icons and quick replies should not', () => {
+    expect(buttonsComponent.find('button.rw-reply svg')).toHaveLength(0);
+    expect(buttonsComponent.find('a.rw-reply svg')).toHaveLength(1);
   });
 });
