@@ -1,5 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -31,13 +31,15 @@ import {
   changeOldUrl,
   setDomHighlight,
   evalUrl,
-  setCustomCss
+  setCustomCss,
+  dropMessages,
 } from 'actions';
 import { safeQuerySelectorAll } from 'utils/dom';
 import { SESSION_NAME, NEXT_MESSAGE } from 'constants';
 import { isVideo, isImage, isButtons, isText, isCarousel } from './msgProcessor';
 import WidgetLayout from './layout';
 import { storeLocalSession, getLocalSession } from '../../store/reducers/helper';
+import ConfirmDialog from './components/ConfirmDialog';
 
 class Widget extends Component {
   constructor(props) {
@@ -50,9 +52,10 @@ class Widget extends Component {
     this.getSessionId = this.getSessionId.bind(this);
     this.updateSocketCustomData = this.updateSocketCustomData.bind(this);
     this.intervalId = null;
-    this.eventListenerCleaner = () => { };
+    this.eventListenerCleaner = () => {};
+    this.handleResetConversation = this.handleResetConversation.bind(this);
+    this.resetConversationHistory = this.resetConversationHistory.bind(this);
   }
-
 
   componentDidMount() {
     const { connectOn, autoClearCache, storage, dispatch, defaultHighlightAnimation } = this.props;
@@ -67,7 +70,6 @@ class Widget extends Component {
       this.initializeWidget();
       return;
     }
-
 
     const localSession = getLocalSession(storage, SESSION_NAME);
     const lastUpdate = localSession ? localSession.lastUpdate : 0;
@@ -119,7 +121,7 @@ class Widget extends Component {
     return localId;
   }
 
-  updateSocketCustomData (data) {
+  updateSocketCustomData(data) {
     const { socket } = this.props;
     if (socket) {
       socket.updateSocketCustomData(data);
@@ -202,16 +204,15 @@ class Widget extends Component {
   }
 
   propagateMetadata(metadata) {
+    const { dispatch } = this.props;
     const {
-      dispatch
-    } = this.props;
-    const { linkTarget,
+      linkTarget,
       userInput,
       pageChangeCallbacks,
       domHighlight,
       forceOpen,
       forceClose,
-      pageEventCallbacks
+      pageEventCallbacks,
     } = metadata;
     if (linkTarget) {
       dispatch(setLinkTarget(linkTarget));
@@ -334,14 +335,17 @@ class Widget extends Component {
           } else {
             const rectangle = elements[0].getBoundingClientRect();
 
-            const ElemIsInViewPort = (
+            const ElemIsInViewPort =
               rectangle.top >= 0 &&
-                rectangle.left >= 0 &&
-                rectangle.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rectangle.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
+              rectangle.left >= 0 &&
+              rectangle.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+              rectangle.right <= (window.innerWidth || document.documentElement.clientWidth);
             if (!ElemIsInViewPort) {
-              elements[0].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+              elements[0].scrollIntoView({
+                block: 'center',
+                inline: 'nearest',
+                behavior: 'smooth',
+              });
             }
           }
         }, 50);
@@ -352,7 +356,7 @@ class Widget extends Component {
   checkVersionBeforePull() {
     const { storage } = this.props;
     const localSession = getLocalSession(storage, SESSION_NAME);
-    if (localSession && (localSession.version !== 'PACKAGE_VERSION_TO_BE_REPLACED')) {
+    if (localSession && localSession.version !== 'PACKAGE_VERSION_TO_BE_REPLACED') {
       storage.removeItem(SESSION_NAME);
     }
   }
@@ -366,7 +370,7 @@ class Widget extends Component {
       initialized,
       connectOn,
       tooltipPayload,
-      tooltipDelay
+      tooltipDelay,
     } = this.props;
     if (!socket.isInitialized()) {
       socket.createSocket();
@@ -389,9 +393,8 @@ class Widget extends Component {
 
       // When session_confirm is received from the server:
       socket.on('session_confirm', (sessionObject) => {
-        const remoteId = (sessionObject && sessionObject.session_id)
-          ? sessionObject.session_id
-          : sessionObject;
+        const remoteId =
+          sessionObject && sessionObject.session_id ? sessionObject.session_id : sessionObject;
 
         // eslint-disable-next-line no-console
         console.log(`session_confirm:${socket.socket.id} session_id:${remoteId}`);
@@ -426,7 +429,8 @@ class Widget extends Component {
               dispatch(emitUserMessage(message));
             }
           }
-        } if (connectOn === 'mount' && tooltipPayload) {
+        }
+        if (connectOn === 'mount' && tooltipPayload) {
           this.tooltipTimeout = setTimeout(() => {
             this.trySendTooltipPayload();
           }, parseInt(tooltipDelay, 10));
@@ -462,7 +466,7 @@ class Widget extends Component {
       isChatVisible,
       embedded,
       connected,
-      dispatch
+      dispatch,
     } = this.props;
 
     // Send initial payload when chat is opened or widget is shown
@@ -482,15 +486,8 @@ class Widget extends Component {
   }
 
   trySendTooltipPayload() {
-    const {
-      tooltipPayload,
-      socket,
-      customData,
-      connected,
-      isChatOpen,
-      dispatch,
-      tooltipSent
-    } = this.props;
+    const { tooltipPayload, socket, customData, connected, isChatOpen, dispatch, tooltipSent } =
+      this.props;
 
     if (connected && !isChatOpen && !tooltipSent.get(tooltipPayload)) {
       const sessionId = this.getSessionId();
@@ -505,11 +502,7 @@ class Widget extends Component {
   }
 
   toggleConversation() {
-    const {
-      isChatOpen,
-      dispatch,
-      disableTooltips
-    } = this.props;
+    const { isChatOpen, dispatch, disableTooltips } = this.props;
     if (isChatOpen && this.delayedMessage) {
       if (!disableTooltips) dispatch(showTooltip(true));
       clearTimeout(this.messageDelayTimeout);
@@ -547,15 +540,13 @@ class Widget extends Component {
     } else if (isButtons(messageClean)) {
       this.props.dispatch(addButtons(messageClean));
     } else if (isCarousel(messageClean)) {
-      this.props.dispatch(
-        addCarousel(messageClean)
-      );
+      this.props.dispatch(addCarousel(messageClean));
     } else if (isVideo(messageClean)) {
       const element = messageClean.attachment.payload;
       this.props.dispatch(
         addVideoSnippet({
           title: element.title,
-          video: element.src
+          video: element.src,
         })
       );
     } else if (isImage(messageClean)) {
@@ -563,7 +554,7 @@ class Widget extends Component {
       this.props.dispatch(
         addImageSnippet({
           title: element.title,
-          image: element.src
+          image: element.src,
         })
       );
     } else {
@@ -586,6 +577,20 @@ class Widget extends Component {
       this.props.dispatch(emitUserMessage(userUttered));
     }
     event.target.message.value = '';
+  }
+
+  handleResetConversation () {
+    // Open confirmation dialog
+    return ConfirmDialog(
+            'Delete conversation history',
+            'This operation cannot be undone',
+            'Delete',
+            this.resetConversationHistory,
+            'Cancel', () => {})
+  }
+
+  resetConversationHistory () {
+    this.props.dispatch(dropMessages());
   }
 
   render() {
@@ -614,6 +619,7 @@ class Widget extends Component {
         displayUnreadCount={this.props.displayUnreadCount}
         showMessageDate={this.props.showMessageDate}
         tooltipPayload={this.props.tooltipPayload}
+        resetConversation={() => this.handleResetConversation()}
       />
     );
   }

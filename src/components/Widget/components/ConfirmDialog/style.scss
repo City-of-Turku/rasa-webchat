@@ -1,0 +1,12 @@
+@import "variables.scss";
+@import "common.scss";
+
+
+.#{$namespace}confirm-dialog {
+    z-index: 100000; // To keep the dialog above chat dialog
+
+    button:focus,
+    button:hover {
+        filter: brightness(90%);
+    }
+}

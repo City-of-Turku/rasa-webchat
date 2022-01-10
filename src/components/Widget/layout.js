@@ -42,6 +42,7 @@ const WidgetLayout = (props) => {
           customComponent={props.customComponent}
           showMessageDate={props.showMessageDate}
           inputTextFieldHint={props.inputTextFieldHint}
+          resetConversation={props.resetConversation}
         />
       )}
       {!props.embedded && (
@@ -94,6 +95,7 @@ WidgetLayout.propTypes = {
   displayUnreadCount: PropTypes.bool,
   showMessageDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   tooltipPayload: PropTypes.string,
+  resetConversation: PropTypes.func
 };
 
 export default connect(mapStateToProps)(WidgetLayout);
