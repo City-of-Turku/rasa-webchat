@@ -72,6 +72,7 @@ class Messages extends Component {
       const messageProps = message.get('props');
       return (<ComponentToRender
         id={index}
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...(messageProps.toJS ? messageProps.toJS() : messageProps)}
         isLast={isLast}
       />);
@@ -80,7 +81,7 @@ class Messages extends Component {
   }
 
   render() {
-    const { displayTypingIndication, profileAvatar, resetConversation } = this.props;
+    const { displayTypingIndication, profileAvatar, deleteHistory } = this.props;
 
     const renderMessages = () => {
       const {
@@ -150,7 +151,7 @@ class Messages extends Component {
           style={{ color: userBackgroundColor }}
           className='rw-clear-conversation'
           title='Clear conversation history'
-          onClick={resetConversation}>
+          onClick={deleteHistory}>
           <FontAwesomeIcon icon={faTrash} />
         </button>
         {renderMessages()}
@@ -182,7 +183,7 @@ Messages.propTypes = {
   displayTypingIndication: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   params: PropTypes.object,
-  resetConversation: PropTypes.func,
+  deleteHistory: PropTypes.func,
 };
 
 Message.defaultTypes = {
