@@ -17,8 +17,18 @@ class DocViewer extends Component {
     };
   }
 
+  handleOpenModal() {
+    this.setState({ openedModal: true });
+    this.iframeTimeoutId = setInterval(this.updateIframeSrc, 1000 * 4);
+  }
+
+  handleCloseModal() {
+    this.setState({ openedModal: false, iFrameLoading: true });
+  }
+
   getIframeLink() {
-    return `https://docs.google.com/viewer?url=${this.props.src}&embedded=true`;
+    const { src } = this.props;
+    return `https://docs.google.com/viewer?url=${src}&embedded=true`;
   }
 
   iframeLoaded() {
@@ -35,29 +45,22 @@ class DocViewer extends Component {
     else clearInterval(this.iframeTimeoutId);
   }
 
-  handleOpenModal() {
-    this.setState({ openedModal: true });
-    this.iframeTimeoutId = setInterval(this.updateIframeSrc, 1000 * 4);
-  }
-
-  handleCloseModal() {
-    this.setState({ openedModal: false, iFrameLoading: true });
-  }
-
   render() {
     const iframeSrc = this.getIframeLink();
+    const { children } = this.props;
+    const { openedModal, iFrameLoading } = this.state;
 
     return (
       <span>
-        <button onClick={this.handleOpenModal} className="rw-doc-viewer-open-modal-link">
-          {this.props.children}
+        <button onClick={this.handleOpenModal} type='button' className="rw-doc-viewer-open-modal-link">
+          {children}
         </button>
-        {this.state.openedModal && (
+        {openedModal && (
           <Portal>
             <div className="rw-doc-viewer-modal-fade" aria-hidden="true" onClick={this.handleCloseModal} />
             <div className="rw-doc-viewer-modal">
               <div className="rw-doc-viewer-modal-body">
-                {this.state.iFrameLoading && <div className="rw-doc-viewer-spinner" />}
+                {iFrameLoading && <div className="rw-doc-viewer-spinner" />}
                 <iframe
                   src={iframeSrc}
                   title="viewer"

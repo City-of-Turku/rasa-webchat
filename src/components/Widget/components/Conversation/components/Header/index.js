@@ -32,7 +32,7 @@ const Header = ({
         <div className="rw-header-buttons">
           {
             showFullScreenButton &&
-            <button className="rw-toggle-fullscreen-button" onClick={toggleFullScreen}>
+            <button type='button' className="rw-toggle-fullscreen-button" onClick={toggleFullScreen}>
               <img
                 className={`rw-toggle-fullscreen ${fullScreenMode ? 'rw-fullScreenExitImage' : 'rw-fullScreenImage'}`}
                 src={fullScreenMode ? fullscreenExit : fullscreen}
@@ -42,7 +42,7 @@ const Header = ({
           }
           {
             showCloseButton &&
-            <button className="rw-close-button" onClick={toggleChat}>
+            <button type='button' className="rw-close-button" onClick={toggleChat}>
               <img
                 className={`rw-close ${closeImage ? '' : 'rw-default'}`}
                 src={closeImage || close}

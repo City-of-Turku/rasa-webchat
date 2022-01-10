@@ -1,5 +1,7 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/sort-comp */
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -396,7 +398,7 @@ class Widget extends Component {
         const remoteId =
           sessionObject && sessionObject.session_id ? sessionObject.session_id : sessionObject;
 
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line no-console, react/prop-types
         console.log(`session_confirm:${socket.socket.id} session_id:${remoteId}`);
         // Store the initial state to both the redux store and the storage, set connected to true
         dispatch(connectServer());
@@ -519,14 +521,15 @@ class Widget extends Component {
       this.messages = [];
       this.delayedMessage = null;
     } else {
-      this.props.dispatch(showTooltip(false));
+      dispatch(showTooltip(false));
     }
     clearTimeout(this.tooltipTimeout);
     dispatch(toggleChat());
   }
 
   toggleFullScreen() {
-    this.props.dispatch(toggleFullScreen());
+    const { dispatch } = this.props;
+    dispatch(toggleFullScreen());
   }
 
   dispatchMessage(message) {
@@ -534,16 +537,17 @@ class Widget extends Component {
       return;
     }
     const { customCss, ...messageClean } = message;
+    const { dispatch, customComponent } = this.props;
 
     if (isText(messageClean)) {
-      this.props.dispatch(addResponseMessage(messageClean.text));
+      dispatch(addResponseMessage(messageClean.text));
     } else if (isButtons(messageClean)) {
-      this.props.dispatch(addButtons(messageClean));
+      dispatch(addButtons(messageClean));
     } else if (isCarousel(messageClean)) {
-      this.props.dispatch(addCarousel(messageClean));
+      dispatch(addCarousel(messageClean));
     } else if (isVideo(messageClean)) {
       const element = messageClean.attachment.payload;
-      this.props.dispatch(
+      dispatch(
         addVideoSnippet({
           title: element.title,
           video: element.src,
@@ -551,7 +555,7 @@ class Widget extends Component {
       );
     } else if (isImage(messageClean)) {
       const element = messageClean.attachment.payload;
-      this.props.dispatch(
+      dispatch(
         addImageSnippet({
           title: element.title,
           image: element.src,
@@ -560,21 +564,22 @@ class Widget extends Component {
     } else {
       // some custom message
       const props = messageClean;
-      if (this.props.customComponent) {
-        this.props.dispatch(renderCustomComponent(this.props.customComponent, props, true));
+      if (customComponent) {
+        dispatch(renderCustomComponent(customComponent, props, true));
       }
     }
     if (customCss) {
-      this.props.dispatch(setCustomCss(message.customCss));
+      dispatch(setCustomCss(message.customCss));
     }
   }
 
   handleMessageSubmit(event) {
     event.preventDefault();
+    const { dispatch } = this.props;
     const userUttered = event.target.message.value;
     if (userUttered) {
-      this.props.dispatch(addUserMessage(userUttered));
-      this.props.dispatch(emitUserMessage(userUttered));
+      dispatch(addUserMessage(userUttered));
+      dispatch(emitUserMessage(userUttered));
     }
     event.target.message.value = '';
   }
@@ -590,7 +595,8 @@ class Widget extends Component {
   }
 
   resetConversationHistory () {
-    this.props.dispatch(dropMessages());
+    const { dispatch } = this.props;
+    dispatch(dropMessages());
   }
 
   render() {
@@ -653,7 +659,14 @@ Widget.propTypes = {
   isChatVisible: PropTypes.bool,
   isChatOpen: PropTypes.bool,
   badge: PropTypes.number,
-  socket: PropTypes.shape({}),
+  socket: PropTypes.shape({
+    on: PropTypes.func,
+    close: PropTypes.func,
+    createSocket: PropTypes.func,
+    emit:  PropTypes.func,
+    isInitialized: PropTypes.func,
+    updateSocketCustomData: PropTypes.func,
+  }),
   embedded: PropTypes.bool,
   params: PropTypes.shape({}),
   connected: PropTypes.bool,
@@ -669,7 +682,9 @@ Widget.propTypes = {
   tooltipSent: PropTypes.shape({}),
   tooltipDelay: PropTypes.number.isRequired,
   domHighlight: PropTypes.shape({}),
-  storage: PropTypes.shape({}),
+  storage: PropTypes.shape({
+    removeItem: PropTypes.func,
+  }),
   disableTooltips: PropTypes.bool,
   defaultHighlightAnimation: PropTypes.string,
   defaultHighlightCss: PropTypes.string,
