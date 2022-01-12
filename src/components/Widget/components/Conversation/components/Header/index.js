@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import close from 'assets/clear-button.svg';
 import fullscreen from 'assets/fullscreen_button.svg';
 import fullscreenExit from 'assets/fullscreen_exit_button.svg';
@@ -18,9 +19,11 @@ const Header = ({
   connected,
   connectingText,
   closeImage,
-  profileAvatar
+  profileAvatar,
+  deleteHistory,
+  showDeleteHistoryButton
 }) => {
-  const { mainColor } = useContext(ThemeContext);
+  const { mainColor, userBackgroundColor } = useContext(ThemeContext);
   return (
     <div className="rw-header-and-loading">
       <div style={{ backgroundColor: mainColor }}className={`rw-header ${subtitle ? 'rw-with-subtitle' : ''}`}>
@@ -31,8 +34,19 @@ const Header = ({
         }
         <div className="rw-header-buttons">
           {
+            showDeleteHistoryButton &&
+            <button
+              type='button'
+              style={{ background: 'inherit' }}
+              className='rw-delete-history-button'
+              aria-label='Clear conversation history'
+              onClick={deleteHistory}>
+              <FontAwesomeIcon icon={faTrash} className='rw-delete-history rw-default' />
+            </button>
+          }
+          {
             showFullScreenButton &&
-            <button className="rw-toggle-fullscreen-button" onClick={toggleFullScreen}>
+            <button type='button' className="rw-toggle-fullscreen-button" onClick={toggleFullScreen}>
               <img
                 className={`rw-toggle-fullscreen ${fullScreenMode ? 'rw-fullScreenExitImage' : 'rw-fullScreenImage'}`}
                 src={fullScreenMode ? fullscreenExit : fullscreen}
@@ -42,7 +56,7 @@ const Header = ({
           }
           {
             showCloseButton &&
-            <button className="rw-close-button" onClick={toggleChat}>
+            <button type='button' className="rw-close-button" onClick={toggleChat}>
               <img
                 className={`rw-close ${closeImage ? '' : 'rw-default'}`}
                 src={closeImage || close}
@@ -74,7 +88,9 @@ Header.propTypes = {
   connected: PropTypes.bool,
   connectingText: PropTypes.string,
   closeImage: PropTypes.string,
-  profileAvatar: PropTypes.string
+  profileAvatar: PropTypes.string,
+  deleteHistory: PropTypes.func,
+  showDeleteHistoryButton: PropTypes.bool
 };
 
 export default Header;

@@ -1,0 +1,71 @@
+@import "variables.scss";
+@import "common.scss";
+
+
+.#{$namespace}confirm-dialog {
+    z-index: 100000; // To keep the dialog above chat dialog
+
+    font-family: $fontfamily;
+    font-size: 16px;
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0 20px 75px rgb(0 0 0 / 13%);
+    padding: 2rem;
+    border-radius: 15px;
+
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        margin-top: 0;
+    }
+
+    p {
+        margin-top: 0;
+    }
+}
+
+.#{$namespace}confirm-button-group {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+
+    button {
+        @include reply;
+        box-shadow: none;
+        font-size: 16px;
+        font-size: inherit;
+        box-sizing: content-box;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    button.cancel {
+        background-color: lighten($grey-3, 20%);
+        border-color: $grey-3;
+        color: black;
+    }
+
+    button.confirm {
+        background-color: lighten($blue-1, 15%);
+        border-color: $blue-1;
+        color: white;
+    }
+
+    button:focus,
+    button.cancel:hover {
+        background-color: darken($grey-3, 20%);
+        border-color: darken($grey-3, 40%);
+        color: white;
+    }
+
+    button.confirm:focus,
+    button.confirm:hover {
+        background-color: darken($blue-1, 5%);
+        border-color: darken($blue-1, 15%);
+    }
+
+    button:first-of-type {
+        margin-right: 1rem;
+    }
+}

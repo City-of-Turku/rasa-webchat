@@ -9,84 +9,84 @@ import socket from './socket';
 import ThemeContext from './components/Widget/ThemeContext';
 // eslint-disable-next-line import/no-mutable-exports
 
-const ConnectedWidget = forwardRef((props, ref) => {
-  class Socket {
-    constructor(
-      url,
-      customData,
-      path,
-      protocol,
-      protocolOptions,
-      onSocketEvent
-    ) {
-      this.url = url;
-      this.customData = customData;
-      this.path = path;
-      this.protocol = protocol;
-      this.protocolOptions = protocolOptions;
-      this.onSocketEvent = onSocketEvent;
-      this.socket = null;
-      this.onEvents = [];
-      this.marker = Math.random();
-    }
+class Socket {
+  constructor(
+    url,
+    customData,
+    path,
+    protocol,
+    protocolOptions,
+    onSocketEvent
+  ) {
+    this.url = url;
+    this.customData = customData;
+    this.path = path;
+    this.protocol = protocol;
+    this.protocolOptions = protocolOptions;
+    this.onSocketEvent = onSocketEvent;
+    this.socket = null;
+    this.onEvents = [];
+    this.marker = Math.random();
+  }
 
-    isInitialized() {
-      return this.socket !== null && this.socket.connected;
-    }
+  isInitialized() {
+    return this.socket !== null && this.socket.connected;
+  }
 
-    on(event, callback) {
-      if (!this.socket) {
-        this.onEvents.push({ event, callback });
-      } else {
-        this.socket.on(event, callback);
-      }
-    }
-
-    emit(message, data) {
-      if (this.socket) {
-        this.socket.emit(message, data);
-      }
-    }
-
-    close() {
-      if (this.socket) {
-        this.socket.close();
-      }
-    }
-
-    updateSocketCustomData(data) {
-      if (this.socket) {
-        this.customData = { ...this.customData, ...data };
-      }
-    }
-
-    createSocket() {
-      this.socket = socket(
-        this.url,
-        this.customData,
-        this.path,
-        this.protocol,
-        this.protocolOptions
-      );
-      // We set a function on session_confirm here so as to avoid any race condition
-      // this will be called first and will set those parameters for everyone to use.
-      this.socket.on('session_confirm', (sessionObject) => {
-        this.sessionConfirmed = true;
-        this.sessionId = (sessionObject && sessionObject.session_id)
-          ? sessionObject.session_id
-          : sessionObject;
-      });
-      this.onEvents.forEach((event) => {
-        this.socket.on(event.event, event.callback);
-      });
-
-      this.onEvents = [];
-      Object.keys(this.onSocketEvent).forEach((event) => {
-        this.socket.on(event, this.onSocketEvent[event]);
-      });
+  on(event, callback) {
+    if (!this.socket) {
+      this.onEvents.push({ event, callback });
+    } else {
+      this.socket.on(event, callback);
     }
   }
 
+  emit(message, data) {
+    if (this.socket) {
+      this.socket.emit(message, data);
+    }
+  }
+
+  close() {
+    if (this.socket) {
+      this.socket.close();
+    }
+  }
+
+  updateSocketCustomData(data) {
+    if (this.socket) {
+      this.customData = { ...this.customData, ...data };
+    }
+  }
+
+  createSocket() {
+    this.socket = socket(
+      this.url,
+      this.customData,
+      this.path,
+      this.protocol,
+      this.protocolOptions
+    );
+    // We set a function on session_confirm here so as to avoid any race condition
+    // this will be called first and will set those parameters for everyone to use.
+    this.socket.on('session_confirm', (sessionObject) => {
+      this.sessionConfirmed = true;
+      this.sessionId = (sessionObject && sessionObject.session_id)
+        ? sessionObject.session_id
+        : sessionObject;
+    });
+    this.onEvents.forEach((event) => {
+      this.socket.on(event.event, event.callback);
+    });
+
+    this.onEvents = [];
+    Object.keys(this.onSocketEvent).forEach((event) => {
+      this.socket.on(event, this.onSocketEvent[event]);
+    });
+  }
+}
+
+const ConnectedWidget = forwardRef((props, ref) => {
   const instanceSocket = useRef({});
   const store = useRef(null);
 
@@ -147,6 +147,7 @@ const ConnectedWidget = forwardRef((props, ref) => {
           profileAvatar={props.profileAvatar}
           showCloseButton={props.showCloseButton}
           showFullScreenButton={props.showFullScreenButton}
+          showDeleteHistoryButton={props.showDeleteHistoryButton}
           hideWhenNotConnected={props.hideWhenNotConnected}
           connectOn={props.connectOn}
           autoClearCache={props.autoClearCache}
@@ -190,6 +191,7 @@ ConnectedWidget.propTypes = {
   connectingText: PropTypes.string,
   showCloseButton: PropTypes.bool,
   showFullScreenButton: PropTypes.bool,
+  showDeleteHistoryButton: PropTypes.bool,
   hideWhenNotConnected: PropTypes.bool,
   connectOn: PropTypes.oneOf(['mount', 'open']),
   autoClearCache: PropTypes.bool,
@@ -256,6 +258,7 @@ ConnectedWidget.defaultProps = {
   docViewer: false,
   showCloseButton: true,
   showFullScreenButton: false,
+  showDeleteHistoryButton: false,
   displayUnreadCount: false,
   showMessageDate: false,
   customMessageDelay: (message) => {

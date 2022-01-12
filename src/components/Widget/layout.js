@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -42,6 +43,9 @@ const WidgetLayout = (props) => {
           customComponent={props.customComponent}
           showMessageDate={props.showMessageDate}
           inputTextFieldHint={props.inputTextFieldHint}
+          deleteHistory={props.deleteHistory}
+          showDeleteHistoryButton={props.showDeleteHistoryButton}
+          embedded={props.embedded}
         />
       )}
       {!props.embedded && (
@@ -85,7 +89,7 @@ WidgetLayout.propTypes = {
   badge: PropTypes.number,
   embedded: PropTypes.bool,
   inputTextFieldHint: PropTypes.string,
-  params: PropTypes.object,
+  params: PropTypes.shape({}),
   connected: PropTypes.bool,
   connectingText: PropTypes.string,
   openLauncherImage: PropTypes.string,
@@ -94,6 +98,8 @@ WidgetLayout.propTypes = {
   displayUnreadCount: PropTypes.bool,
   showMessageDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   tooltipPayload: PropTypes.string,
+  deleteHistory: PropTypes.func,
+  showDeleteHistoryButton: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(WidgetLayout);

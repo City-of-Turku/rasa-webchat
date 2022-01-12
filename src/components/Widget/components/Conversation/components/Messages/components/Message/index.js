@@ -10,10 +10,10 @@ import ThemeContext from '../../../../../../ThemeContext';
 
 class Message extends PureComponent {
   render() {
-    const { docViewer, linkTarget } = this.props;
-    const sender = this.props.message.get('sender');
-    const text = this.props.message.get('text');
-    const customCss = this.props.message.get('customCss') && this.props.message.get('customCss').toJS();
+    const { docViewer, linkTarget, message } = this.props;
+    const sender = message.get('sender');
+    const text = message.get('text');
+    const customCss = message.get('customCss') && message.get('customCss').toJS();
 
     if (customCss && customCss.style === 'class') {
       customCss.css = customCss.css.replace(/^\./, '');

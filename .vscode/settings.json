@@ -2,6 +2,11 @@
   "eslint.enable": true,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
-  "cSpell.words": ["Nuka", "socketio"],
+  "cSpell.words": [
+    "IMGREPLY",
+    "Nuka",
+    "socketio",
+    "VIDREPLY"
+  ],
   "files.insertFinalNewline": true
 }

@@ -33,6 +33,7 @@
     "object-hash": "^1.1.5",
     "path-browserify": "^1.0.1",
     "prop-types": "^15.7.2",
+    "react-confirm-alert": "^2.7.0",
     "react-immutable-proptypes": "^2.2.0",
     "react-markdown": "^6.0.3",
     "react-popper": "^2.2.3",
