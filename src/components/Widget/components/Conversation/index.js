@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -20,13 +21,16 @@ const Conversation = props =>
       connectingText={props.connectingText}
       closeImage={props.closeImage}
       profileAvatar={props.profileAvatar}
+      deleteHistory={props.deleteHistory}
+      showDeleteHistoryButton={!props.embedded && props.showDeleteHistoryButton}
     />
     <Messages
       profileAvatar={props.profileAvatar}
       params={props.params}
       customComponent={props.customComponent}
       showMessageDate={props.showMessageDate}
-      resetConversation={props.resetConversation}
+      deleteHistory={props.deleteHistory}
+      showDeleteHistoryButton={props.embedded && props.showDeleteHistoryButton}
     />
     <Sender
       sendMessage={props.sendMessage}
@@ -47,13 +51,15 @@ Conversation.propTypes = {
   showFullScreenButton: PropTypes.bool,
   disabledInput: PropTypes.bool,
   inputTextFieldHint: PropTypes.string,
-  params: PropTypes.object,
+  params: PropTypes.shape({}),
   connected: PropTypes.bool,
   connectingText: PropTypes.string,
   closeImage: PropTypes.string,
   customComponent: PropTypes.func,
   showMessageDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  resetConversation: PropTypes.func,
+  deleteHistory: PropTypes.func,
+  showDeleteHistoryButton: PropTypes.bool,
+  embedded: PropTypes.bool
 };
 
 export default Conversation;

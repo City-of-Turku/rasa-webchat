@@ -61,12 +61,26 @@
     display: none;
   }
 
-  .#{$namespace}toggle-fullscreen-button {
+  .#{$namespace}toggle-fullscreen-button,
+  .#{$namespace}delete-history-button {
     @include header-button-fs;
   }
 
-  .#{$namespace}toggle-fullscreen {
+  .#{$namespace}delete-history-button {
+    color: white;
+  }
+
+  .#{$namespace}toggle-fullscreen,
+  .#{$namespace}delete-history {
     @include header-icon-fs;
+  }
+
+  .#{$namespace}delete-history {
+    width: auto;
+    padding-top: 1px;
+    &.#{$namespace}default {
+      height: 22px;
+    }
   }
 
   .#{$namespace}loading {
@@ -98,12 +112,14 @@
   }
 
   .#{$namespace}close-button,
-  .#{$namespace}toggle-fullscreen-button {
+  .#{$namespace}toggle-fullscreen-button,
+  .#{$namespace}delete-history-button {
     @include header-button-fs;
   }
 
   .#{$namespace}close,
-  .#{$namespace}toggle-fullscreen {
+  .#{$namespace}toggle-fullscreen,
+  .#{$namespace}delete-history {
     @include header-icon-fs;
   }
 
@@ -127,11 +143,13 @@
       @include title-fs;
     }
 
-    .#{$namespace}close-button {
+    .#{$namespace}close-button,
+    .#{$namespace}delete-history-button {
       @include header-button-fs;
     }
 
-    .#{$namespace}close {
+    .#{$namespace}close,
+    .#{$namespace}delete-history {
       @include header-icon-fs;
     }
 

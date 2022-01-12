@@ -55,8 +55,8 @@ class Widget extends Component {
     this.updateSocketCustomData = this.updateSocketCustomData.bind(this);
     this.intervalId = null;
     this.eventListenerCleaner = () => {};
-    this.handleResetConversation = this.handleResetConversation.bind(this);
-    this.resetConversationHistory = this.resetConversationHistory.bind(this);
+    this.handleDeleteConversationHistory = this.handleDeleteConversationHistory.bind(this);
+    this.deleteConversationHistory = this.deleteConversationHistory.bind(this);
   }
 
   componentDidMount() {
@@ -284,6 +284,7 @@ class Widget extends Component {
 
   clearCustomStyle() {
     const { domHighlight, defaultHighlightClassname } = this.props;
+    // eslint-disable-next-line react/prop-types
     const domHighlightJS = domHighlight.toJS() || {};
     if (domHighlightJS.selector) {
       const elements = safeQuerySelectorAll(domHighlightJS.selector);
@@ -308,6 +309,7 @@ class Widget extends Component {
 
   applyCustomStyle() {
     const { domHighlight, defaultHighlightCss, defaultHighlightClassname } = this.props;
+    // eslint-disable-next-line react/prop-types
     const domHighlightJS = domHighlight.toJS() || {};
     if (domHighlightJS.selector) {
       const elements = safeQuerySelectorAll(domHighlightJS.selector);
@@ -491,6 +493,7 @@ class Widget extends Component {
     const { tooltipPayload, socket, customData, connected, isChatOpen, dispatch, tooltipSent } =
       this.props;
 
+    // eslint-disable-next-line react/prop-types
     if (connected && !isChatOpen && !tooltipSent.get(tooltipPayload)) {
       const sessionId = this.getSessionId();
 
@@ -584,17 +587,26 @@ class Widget extends Component {
     event.target.message.value = '';
   }
 
-  handleResetConversation () {
+  handleDeleteConversationHistory() {
+    const {
+      deleteHistoryCancelButton,
+      deleteHistoryConfirmButton,
+      deleteHistoryConfirmSubtitle,
+      deleteHistoryConfirmTitle,
+    } = this.props;
+
     // Open confirmation dialog
     return ConfirmDialog(
-            'Delete conversation history',
-            'This operation cannot be undone',
-            'Delete',
-            this.resetConversationHistory,
-            'Cancel', () => {})
+      deleteHistoryConfirmTitle,
+      deleteHistoryConfirmSubtitle,
+      deleteHistoryConfirmButton,
+      this.deleteConversationHistory,
+      deleteHistoryCancelButton,
+      () => {}
+    );
   }
 
-  resetConversationHistory () {
+  deleteConversationHistory() {
     const { dispatch } = this.props;
     dispatch(dropMessages());
   }
@@ -604,7 +616,7 @@ class Widget extends Component {
       <WidgetLayout
         toggleChat={() => this.toggleConversation()}
         toggleFullScreen={() => this.toggleFullScreen()}
-        onSendMessage={event => this.handleMessageSubmit(event)}
+        onSendMessage={(event) => this.handleMessageSubmit(event)}
         title={this.props.title}
         subtitle={this.props.subtitle}
         customData={this.props.customData}
@@ -625,7 +637,10 @@ class Widget extends Component {
         displayUnreadCount={this.props.displayUnreadCount}
         showMessageDate={this.props.showMessageDate}
         tooltipPayload={this.props.tooltipPayload}
-        resetConversation={() => this.handleResetConversation()}
+        deleteHistory={() => this.handleDeleteConversationHistory()}
+        showDeleteHistoryButton={this.props.showDeleteHistoryButton}
+        deleteHistoryConfirmTitle={this.props.deleteHistoryConfirmTitle}
+        deleteHistoryConfirmSubtitle={this.props.deleteHistoryConfirmSubtitle}
       />
     );
   }
@@ -658,6 +673,11 @@ Widget.propTypes = {
   fullScreenMode: PropTypes.bool,
   isChatVisible: PropTypes.bool,
   isChatOpen: PropTypes.bool,
+  showDeleteHistoryButton: PropTypes.bool,
+  deleteHistoryConfirmTitle: PropTypes.string,
+  deleteHistoryConfirmSubtitle: PropTypes.string,
+  deleteHistoryConfirmButton: PropTypes.string,
+  deleteHistoryCancelButton: PropTypes.string,
   badge: PropTypes.number,
   socket: PropTypes.shape({
     on: PropTypes.func,
@@ -685,6 +705,8 @@ Widget.propTypes = {
   storage: PropTypes.shape({
     removeItem: PropTypes.func,
   }),
+  // eslint-disable-next-line react/no-unused-prop-types
+  oldUrl: PropTypes.string,
   disableTooltips: PropTypes.bool,
   defaultHighlightAnimation: PropTypes.string,
   defaultHighlightCss: PropTypes.string,
@@ -695,11 +717,16 @@ Widget.propTypes = {
 Widget.defaultProps = {
   isChatOpen: false,
   isChatVisible: true,
+  showDeleteHistoryButton: false,
   fullScreenMode: false,
   connectOn: 'mount',
   autoClearCache: false,
   displayUnreadCount: false,
   tooltipPayload: null,
+  deleteHistoryConfirmTitle: 'Delete conversation history',
+  deleteHistoryConfirmSubtitle: 'This operation cannot be undone',
+  deleteHistoryConfirmButton: 'Delete',
+  deleteHistoryCancelButton: 'Cancel',
   inputTextFieldHint: 'Type a message...',
   oldUrl: '',
   disableTooltips: false,

@@ -142,18 +142,19 @@ class Messages extends Component {
       ));
     };
 
+    const { showDeleteHistoryButton } = this.props;
     const { conversationBackgroundColor, assistBackgroundColor, userBackgroundColor } = this.context;
 
     return (
       <div id='rw-messages' style={{ backgroundColor: conversationBackgroundColor }} className='rw-messages-container'>
-        <button
+        {showDeleteHistoryButton && <button
           type='button'
           style={{ color: userBackgroundColor }}
-          className='rw-clear-conversation'
-          title='Clear conversation history'
+          className='rw-delete-history-button'
+          aria-label='Clear conversation history'
           onClick={deleteHistory}>
           <FontAwesomeIcon icon={faTrash} />
-        </button>
+        </button>}
         {renderMessages()}
         {displayTypingIndication && (
           <div className={`rw-message rw-typing-indication ${profileAvatar && 'rw-with-avatar'}`}>
@@ -184,6 +185,7 @@ Messages.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   params: PropTypes.object,
   deleteHistory: PropTypes.func,
+  showDeleteHistoryButton: PropTypes.bool
 };
 
 Message.defaultTypes = {
