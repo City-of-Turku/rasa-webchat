@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -12,21 +13,35 @@ const ConfirmDialog = (
   cancelButtonCallback
 ) =>
   confirmAlert({
-    title,
-    message: subtitle,
-    buttons: [
-      {
-        label: confirmButtonText,
-        onClick: () => confirmButtonCallback(),
-      },
-      {
-        label: cancelButtonText,
-        onClick: () => cancelButtonCallback(),
-      },
-    ],
     closeOnEscape: true,
     closeOnClickOutside: true,
-    overlayClassName: 'rw-confirm-dialog',
+    overlayClassName: 'rw-confirm-overlay',
+    customUI: ({ onClose }) => (
+      <div className='rw-confirm-dialog'>
+        <h1>{title}</h1>
+        <p>{subtitle}</p>
+        <div className='rw-confirm-button-group'>
+          <button
+            className='cancel'
+            type='button'
+            onClick={() => {
+              cancelButtonCallback();
+              onClose();
+            }}>
+            {cancelButtonText}
+          </button>
+          <button
+            className='confirm'
+            type='button'
+            onClick={() => {
+              confirmButtonCallback();
+              onClose();
+            }}>
+            {confirmButtonText}
+          </button>
+        </div>
+      </div>
+    ),
   });
 
 ConfirmDialog.propTypes = {
