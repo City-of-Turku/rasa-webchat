@@ -148,6 +148,10 @@ const ConnectedWidget = forwardRef((props, ref) => {
           showCloseButton={props.showCloseButton}
           showFullScreenButton={props.showFullScreenButton}
           showDeleteHistoryButton={props.showDeleteHistoryButton}
+          deleteHistoryConfirmTitle={props.deleteHistoryConfirmTitle}
+          deleteHistoryConfirmSubtitle={props.deleteHistoryConfirmSubtitle}
+          deleteHistoryConfirmButton={props.deleteHistoryConfirmButton}
+          deleteHistoryCancelButton={props.deleteHistoryCancelButton}
           hideWhenNotConnected={props.hideWhenNotConnected}
           connectOn={props.connectOn}
           autoClearCache={props.autoClearCache}
@@ -192,6 +196,10 @@ ConnectedWidget.propTypes = {
   showCloseButton: PropTypes.bool,
   showFullScreenButton: PropTypes.bool,
   showDeleteHistoryButton: PropTypes.bool,
+  deleteHistoryConfirmTitle: PropTypes.string,
+  deleteHistoryConfirmSubtitle: PropTypes.string,
+  deleteHistoryConfirmButton: PropTypes.string,
+  deleteHistoryCancelButton: PropTypes.string,
   hideWhenNotConnected: PropTypes.bool,
   connectOn: PropTypes.oneOf(['mount', 'open']),
   autoClearCache: PropTypes.bool,

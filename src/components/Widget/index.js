@@ -639,14 +639,12 @@ class Widget extends Component {
         tooltipPayload={this.props.tooltipPayload}
         deleteHistory={() => this.handleDeleteConversationHistory()}
         showDeleteHistoryButton={this.props.showDeleteHistoryButton}
-        deleteHistoryConfirmTitle={this.props.deleteHistoryConfirmTitle}
-        deleteHistoryConfirmSubtitle={this.props.deleteHistoryConfirmSubtitle}
       />
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   initialized: state.behavior.get('initialized'),
   connected: state.behavior.get('connected'),
   isChatOpen: state.behavior.get('isChatOpen'),
@@ -656,7 +654,7 @@ const mapStateToProps = state => ({
   oldUrl: state.behavior.get('oldUrl'),
   pageChangeCallbacks: state.behavior.get('pageChangeCallbacks'),
   domHighlight: state.metadata.get('domHighlight'),
-  messages: state.messages
+  messages: state.messages,
 });
 
 Widget.propTypes = {
@@ -683,7 +681,7 @@ Widget.propTypes = {
     on: PropTypes.func,
     close: PropTypes.func,
     createSocket: PropTypes.func,
-    emit:  PropTypes.func,
+    emit: PropTypes.func,
     isInitialized: PropTypes.func,
     updateSocketCustomData: PropTypes.func,
   }),
@@ -711,7 +709,7 @@ Widget.propTypes = {
   defaultHighlightAnimation: PropTypes.string,
   defaultHighlightCss: PropTypes.string,
   defaultHighlightClassname: PropTypes.string,
-  messages: ImmutablePropTypes.listOf(ImmutablePropTypes.map)
+  messages: ImmutablePropTypes.listOf(ImmutablePropTypes.map),
 };
 
 Widget.defaultProps = {
@@ -731,7 +729,8 @@ Widget.defaultProps = {
   oldUrl: '',
   disableTooltips: false,
   defaultHighlightClassname: '',
-  defaultHighlightCss: 'animation: 0.5s linear infinite alternate default-botfront-blinker-animation; outline-style: solid;',
+  defaultHighlightCss:
+    'animation: 0.5s linear infinite alternate default-botfront-blinker-animation; outline-style: solid;',
   // unfortunately it looks like outline-style is not an animatable property on Safari
   defaultHighlightAnimation: `@keyframes default-botfront-blinker-animation {
     0% {
@@ -746,7 +745,7 @@ Widget.defaultProps = {
     100% {
       outline-color: green;
     }
-  }`
+  }`,
 };
 
 export default connect(mapStateToProps, null, null, { forwardRef: true })(Widget);
