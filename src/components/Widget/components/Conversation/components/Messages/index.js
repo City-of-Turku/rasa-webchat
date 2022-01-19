@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faHistory } from '@fortawesome/free-solid-svg-icons';
 
 import { MESSAGES_TYPES } from 'constants';
 import { Video, Image, Message, Carousel, Buttons } from 'messagesComponents';
@@ -81,7 +81,7 @@ class Messages extends Component {
   }
 
   render() {
-    const { displayTypingIndication, profileAvatar, deleteHistory } = this.props;
+    const { displayTypingIndication, profileAvatar, resetChat } = this.props;
 
     const renderMessages = () => {
       const {
@@ -142,18 +142,18 @@ class Messages extends Component {
       ));
     };
 
-    const { showDeleteHistoryButton } = this.props;
+    const { showResetChatButton, restartOnChatReset } = this.props;
     const { conversationBackgroundColor, assistBackgroundColor, userBackgroundColor } = this.context;
 
     return (
       <div id='rw-messages' style={{ backgroundColor: conversationBackgroundColor }} className='rw-messages-container'>
-        {showDeleteHistoryButton && <button
+        {showResetChatButton && <button
           type='button'
-          style={{ color: userBackgroundColor }}
+          style={{ color: userBackgroundColor, backgroundColor: conversationBackgroundColor }}
           className='rw-delete-history-button'
           aria-label='Clear conversation history'
-          onClick={deleteHistory}>
-          <FontAwesomeIcon icon={faTrash} />
+          onClick={resetChat}>
+          <FontAwesomeIcon icon={restartOnChatReset ? faHistory : faTrash} />
         </button>}
         {renderMessages()}
         {displayTypingIndication && (
@@ -184,8 +184,9 @@ Messages.propTypes = {
   displayTypingIndication: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   params: PropTypes.object,
-  deleteHistory: PropTypes.func,
-  showDeleteHistoryButton: PropTypes.bool
+  resetChat: PropTypes.func,
+  restartOnChatReset: PropTypes.bool,
+  showResetChatButton: PropTypes.bool
 };
 
 Message.defaultTypes = {

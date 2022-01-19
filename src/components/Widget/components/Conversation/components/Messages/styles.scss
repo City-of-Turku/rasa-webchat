@@ -88,9 +88,16 @@
   }
 
   .#{$namespace}delete-history-button {
-    position: absolute;
+    background-color: $white; // Same default color as for conversation background
+    color: $tertiary;
+    box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.45);
+    position: fixed;
     z-index: 2;
     right: 20px;
+
+    &:hover, &:focus {
+      box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.3);
+    }
     
     svg {
       font-size: 18px;
@@ -100,7 +107,6 @@
       margin: auto auto;
     }
 
-    background: radial-gradient(circle at center, white, white 15%, rgba(255, 255, 255, 0.25) 85%, transparent 85%);
     border-radius: 50%;
     height: 40px;
     width: 40px;
@@ -109,7 +115,6 @@
       svg {
         height: 24px;
       }
-      background: radial-gradient(circle at center, white, white 35%, rgba(255, 255, 255, 0.25) 85%, transparent 85%);
     }
   }
 }

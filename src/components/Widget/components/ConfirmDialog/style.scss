@@ -1,10 +1,11 @@
 @import "variables.scss";
 @import "common.scss";
 
+.#{$namespace}confirm-overlay {
+    z-index: 100000; // To keep the dialog above chat dialog
+}
 
 .#{$namespace}confirm-dialog {
-    z-index: 100000; // To keep the dialog above chat dialog
-
     font-family: $fontfamily;
     font-size: 16px;
     text-align: left;

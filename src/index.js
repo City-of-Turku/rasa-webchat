@@ -147,11 +147,12 @@ const ConnectedWidget = forwardRef((props, ref) => {
           profileAvatar={props.profileAvatar}
           showCloseButton={props.showCloseButton}
           showFullScreenButton={props.showFullScreenButton}
-          showDeleteHistoryButton={props.showDeleteHistoryButton}
-          deleteHistoryConfirmTitle={props.deleteHistoryConfirmTitle}
-          deleteHistoryConfirmSubtitle={props.deleteHistoryConfirmSubtitle}
-          deleteHistoryConfirmButton={props.deleteHistoryConfirmButton}
-          deleteHistoryCancelButton={props.deleteHistoryCancelButton}
+          showResetChatButton={props.showResetChatButton}
+          restartOnChatReset={props.restartOnChatReset}
+          resetChatConfirmTitle={props.resetChatConfirmTitle}
+          resetChatConfirmSubtitle={props.resetChatConfirmSubtitle}
+          resetChatConfirmButton={props.resetChatConfirmButton}
+          resetChatCancelButton={props.resetChatCancelButton}
           hideWhenNotConnected={props.hideWhenNotConnected}
           connectOn={props.connectOn}
           autoClearCache={props.autoClearCache}
@@ -195,11 +196,12 @@ ConnectedWidget.propTypes = {
   connectingText: PropTypes.string,
   showCloseButton: PropTypes.bool,
   showFullScreenButton: PropTypes.bool,
-  showDeleteHistoryButton: PropTypes.bool,
-  deleteHistoryConfirmTitle: PropTypes.string,
-  deleteHistoryConfirmSubtitle: PropTypes.string,
-  deleteHistoryConfirmButton: PropTypes.string,
-  deleteHistoryCancelButton: PropTypes.string,
+  showResetChatButton: PropTypes.bool,
+  restartOnChatReset: PropTypes.bool,
+  resetChatConfirmTitle: PropTypes.string,
+  resetChatConfirmSubtitle: PropTypes.string,
+  resetChatConfirmButton: PropTypes.string,
+  resetChatCancelButton: PropTypes.string,
   hideWhenNotConnected: PropTypes.bool,
   connectOn: PropTypes.oneOf(['mount', 'open']),
   autoClearCache: PropTypes.bool,
@@ -266,7 +268,8 @@ ConnectedWidget.defaultProps = {
   docViewer: false,
   showCloseButton: true,
   showFullScreenButton: false,
-  showDeleteHistoryButton: false,
+  showResetChatButton: false,
+  restartOnChatReset: true,
   displayUnreadCount: false,
   showMessageDate: false,
   customMessageDelay: (message) => {
