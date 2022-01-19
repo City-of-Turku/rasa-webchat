@@ -734,9 +734,9 @@ Widget.defaultProps = {
   autoClearCache: false,
   displayUnreadCount: false,
   tooltipPayload: null,
-  // TODO: Adjust default texts
+  restartOnChatReset: true,
   resetChatConfirmTitle: 'Delete conversation history',
-  resetChatConfirmSubtitle: 'This operation cannot be undone',
+  resetChatConfirmSubtitle: 'Delete history and restart conversation. This operation cannot be undone',
   resetChatConfirmButton: 'Delete',
   resetChatCancelButton: 'Cancel',
   inputTextFieldHint: 'Type a message...',
