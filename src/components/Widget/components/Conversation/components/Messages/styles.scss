@@ -22,30 +22,37 @@
     font-size: 11px;
     color: #a4a7ab;
   }
+
   // When we have several messages, the first one of the group
   .#{$namespace}message:first-child:not(:only-child) {
     .#{$namespace}response {
       border-radius: 0 15px 15px 0;
     }
+
     margin-bottom: 2px;
   }
+
   // When we have several messages, messages that are neither the first, nor the last
   .#{$namespace}message:not(:first-child):not(:last-child):not(:last-child) {
     .#{$namespace}response {
       border-radius: 0 15px 15px 0;
     }
+
     margin-top: 2px;
     margin-bottom: 2px;
   }
+
   // every message in a group that is NOT the first
   .#{$namespace}message:not(:first-child):not(:only-child) {
     .#{$namespace}avatar {
       display: none;
     }
+
     &.#{$namespace}with-avatar {
       margin-left: 33px;
     }
   }
+
   // When we have several messages, the last one of the group
   .#{$namespace}message:last-child:not(:only-child) {
     margin-top: 2px;
@@ -65,10 +72,12 @@
   height: 50vh;
   max-height: 425px;
   overflow-y: auto;
-  @media screen and (min-width: 800px){
+
+  @media screen and (min-width: 800px) {
     height: 510px;
     max-height: 50vh;
   }
+
   padding-top: 10px;
 }
 
@@ -76,6 +85,41 @@
   .#{$namespace}messages-container {
     height: 100%;
     max-height: 100%;
+  }
+
+  .#{$namespace}delete-history-button {
+    background-color: $white; // Same default color as for conversation background
+    color: $tertiary;
+    box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.45);
+    position: absolute;
+    z-index: 2;
+    right: 25px;
+    margin-top: 0;
+
+    &:hover,
+    &:focus {
+      box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.3);
+    }
+
+    svg {
+      font-size: 18px;
+      height: 20px;
+      width: auto;
+      position: relative;
+      margin: auto auto;
+    }
+
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+
+    &:focus,
+    &:active,
+    &:hover {
+      svg {
+        height: 24px;
+      }
+    }
   }
 }
 
@@ -86,26 +130,27 @@
   }
 }
 
-@media screen and (max-width: 800px)  {
+@media screen and (max-width: 800px) {
   .#{$namespace}messages-container {
     @include messages-container-fs;
   }
 }
 
 div#wave {
-  position:relative;
-  text-align:center;
-  width:25px;
-  height:13px;
+  position: relative;
+  text-align: center;
+  width: 25px;
+  height: 13px;
   margin-left: auto;
   margin-right: auto;
+
   .#{$namespace}dot {
     opacity: 0.4;
-    display:inline-block;
-    width:5px;
-    height:5px;
-    border-radius:50%;
-    margin-right:3px;
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-right: 3px;
     background: #000000;
     animation: wave 1.6s linear infinite;
 
@@ -120,7 +165,10 @@ div#wave {
 }
 
 @keyframes wave {
-  0%, 60%, 100% {
+
+  0%,
+  60%,
+  100% {
     transform: initial;
   }
 

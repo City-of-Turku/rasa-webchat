@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faHistory } from '@fortawesome/free-solid-svg-icons';
 
 import { MESSAGES_TYPES } from 'constants';
 import { Video, Image, Message, Carousel, Buttons } from 'messagesComponents';
@@ -70,6 +72,7 @@ class Messages extends Component {
       const messageProps = message.get('props');
       return (<ComponentToRender
         id={index}
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...(messageProps.toJS ? messageProps.toJS() : messageProps)}
         isLast={isLast}
       />);
@@ -78,7 +81,7 @@ class Messages extends Component {
   }
 
   render() {
-    const { displayTypingIndication, profileAvatar } = this.props;
+    const { displayTypingIndication, profileAvatar, resetChat } = this.props;
 
     const renderMessages = () => {
       const {
@@ -138,11 +141,21 @@ class Messages extends Component {
         </div>
       ));
     };
-    const { conversationBackgroundColor, assistBackgroundColor } = this.context;
+
+    const { showResetChatButton, restartOnChatReset } = this.props;
+    const { conversationBackgroundColor, assistBackgroundColor, userBackgroundColor } = this.context;
 
     return (
-      <div id="rw-messages" style={{ backgroundColor: conversationBackgroundColor }} className="rw-messages-container">
-        { renderMessages() }
+      <div id='rw-messages' style={{ backgroundColor: conversationBackgroundColor, overflowY: showResetChatButton ? 'scroll' : 'auto' }} className='rw-messages-container'>
+        {showResetChatButton && <button
+          type='button'
+          style={{ color: userBackgroundColor, backgroundColor: conversationBackgroundColor }}
+          className='rw-delete-history-button'
+          aria-label='Clear conversation history'
+          onClick={resetChat}>
+          <FontAwesomeIcon icon={restartOnChatReset ? faHistory : faTrash} />
+        </button>}
+        {renderMessages()}
         {displayTypingIndication && (
           <div className={`rw-message rw-typing-indication ${profileAvatar && 'rw-with-avatar'}`}>
             {
@@ -168,7 +181,12 @@ Messages.propTypes = {
   profileAvatar: PropTypes.string,
   customComponent: PropTypes.func,
   showMessageDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  displayTypingIndication: PropTypes.bool
+  displayTypingIndication: PropTypes.bool,
+  // eslint-disable-next-line react/forbid-prop-types
+  params: PropTypes.object,
+  resetChat: PropTypes.func,
+  restartOnChatReset: PropTypes.bool,
+  showResetChatButton: PropTypes.bool
 };
 
 Message.defaultTypes = {

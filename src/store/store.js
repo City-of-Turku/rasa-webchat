@@ -73,6 +73,10 @@ function initStore(
       case actionTypes.GET_FULLSCREEN_STATE: {
         return store.getState().behavior.get('fullScreenMode');
       }
+      case actionTypes.DROP_MESSAGES: {
+        if (onWidgetEvent.onChatReset) onWidgetEvent.onChatReset();
+        break;
+      }
       case actionTypes.EVAL_URL: {
         const pageCallbacks = store.getState().behavior.get('pageChangeCallbacks');
         const pageCallbacksJs = pageCallbacks ? pageCallbacks.toJS() : {};

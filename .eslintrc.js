@@ -43,8 +43,9 @@ module.exports = {
     'import/default': 'error',
     'import/namespace': 'error',
     'import/no-absolute-path': 'error',
-    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
+    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+    'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
+    'react/destructuring-assignment': ['error', 'always', { ignoreClassFields: true }],
   },
   settings: {
     'import/resolver': {

@@ -9,6 +9,7 @@ const ThemeContext = React.createContext({
   assistTextColor: '',
   assistBackgroundColor: '',
   // To customize card carousels:
+  showIconsOnWeblinks: true, // Whether an icon differentiation web links from conversation buttons will be shown
   showCarouselImages: true, // Whether carousel card images (or placeholders) will be shown
   carouselCardsBackground: '', // Background color of carousel cards
   carouselCardsTextColor: '', // Color of text in carousel cards (title & subtitle)

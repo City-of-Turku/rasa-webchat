@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/sort-comp */
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -31,13 +33,15 @@ import {
   changeOldUrl,
   setDomHighlight,
   evalUrl,
-  setCustomCss
+  setCustomCss,
+  dropMessages,
 } from 'actions';
 import { safeQuerySelectorAll } from 'utils/dom';
 import { SESSION_NAME, NEXT_MESSAGE } from 'constants';
 import { isVideo, isImage, isButtons, isText, isCarousel } from './msgProcessor';
 import WidgetLayout from './layout';
 import { storeLocalSession, getLocalSession } from '../../store/reducers/helper';
+import ConfirmDialog from './components/ConfirmDialog';
 
 class Widget extends Component {
   constructor(props) {
@@ -50,9 +54,10 @@ class Widget extends Component {
     this.getSessionId = this.getSessionId.bind(this);
     this.updateSocketCustomData = this.updateSocketCustomData.bind(this);
     this.intervalId = null;
-    this.eventListenerCleaner = () => { };
+    this.eventListenerCleaner = () => {};
+    this.handleResetChat = this.handleResetChat.bind(this);
+    this.resetChat = this.resetChat.bind(this);
   }
-
 
   componentDidMount() {
     const { connectOn, autoClearCache, storage, dispatch, defaultHighlightAnimation } = this.props;
@@ -67,7 +72,6 @@ class Widget extends Component {
       this.initializeWidget();
       return;
     }
-
 
     const localSession = getLocalSession(storage, SESSION_NAME);
     const lastUpdate = localSession ? localSession.lastUpdate : 0;
@@ -119,7 +123,7 @@ class Widget extends Component {
     return localId;
   }
 
-  updateSocketCustomData (data) {
+  updateSocketCustomData(data) {
     const { socket } = this.props;
     if (socket) {
       socket.updateSocketCustomData(data);
@@ -202,16 +206,15 @@ class Widget extends Component {
   }
 
   propagateMetadata(metadata) {
+    const { dispatch } = this.props;
     const {
-      dispatch
-    } = this.props;
-    const { linkTarget,
+      linkTarget,
       userInput,
       pageChangeCallbacks,
       domHighlight,
       forceOpen,
       forceClose,
-      pageEventCallbacks
+      pageEventCallbacks,
     } = metadata;
     if (linkTarget) {
       dispatch(setLinkTarget(linkTarget));
@@ -281,6 +284,7 @@ class Widget extends Component {
 
   clearCustomStyle() {
     const { domHighlight, defaultHighlightClassname } = this.props;
+    // eslint-disable-next-line react/prop-types
     const domHighlightJS = domHighlight.toJS() || {};
     if (domHighlightJS.selector) {
       const elements = safeQuerySelectorAll(domHighlightJS.selector);
@@ -305,6 +309,7 @@ class Widget extends Component {
 
   applyCustomStyle() {
     const { domHighlight, defaultHighlightCss, defaultHighlightClassname } = this.props;
+    // eslint-disable-next-line react/prop-types
     const domHighlightJS = domHighlight.toJS() || {};
     if (domHighlightJS.selector) {
       const elements = safeQuerySelectorAll(domHighlightJS.selector);
@@ -334,14 +339,17 @@ class Widget extends Component {
           } else {
             const rectangle = elements[0].getBoundingClientRect();
 
-            const ElemIsInViewPort = (
+            const ElemIsInViewPort =
               rectangle.top >= 0 &&
-                rectangle.left >= 0 &&
-                rectangle.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rectangle.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
+              rectangle.left >= 0 &&
+              rectangle.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+              rectangle.right <= (window.innerWidth || document.documentElement.clientWidth);
             if (!ElemIsInViewPort) {
-              elements[0].scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+              elements[0].scrollIntoView({
+                block: 'center',
+                inline: 'nearest',
+                behavior: 'smooth',
+              });
             }
           }
         }, 50);
@@ -352,7 +360,7 @@ class Widget extends Component {
   checkVersionBeforePull() {
     const { storage } = this.props;
     const localSession = getLocalSession(storage, SESSION_NAME);
-    if (localSession && (localSession.version !== 'PACKAGE_VERSION_TO_BE_REPLACED')) {
+    if (localSession && localSession.version !== 'PACKAGE_VERSION_TO_BE_REPLACED') {
       storage.removeItem(SESSION_NAME);
     }
   }
@@ -366,7 +374,7 @@ class Widget extends Component {
       initialized,
       connectOn,
       tooltipPayload,
-      tooltipDelay
+      tooltipDelay,
     } = this.props;
     if (!socket.isInitialized()) {
       socket.createSocket();
@@ -389,11 +397,10 @@ class Widget extends Component {
 
       // When session_confirm is received from the server:
       socket.on('session_confirm', (sessionObject) => {
-        const remoteId = (sessionObject && sessionObject.session_id)
-          ? sessionObject.session_id
-          : sessionObject;
+        const remoteId =
+          sessionObject && sessionObject.session_id ? sessionObject.session_id : sessionObject;
 
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line no-console, react/prop-types
         console.log(`session_confirm:${socket.socket.id} session_id:${remoteId}`);
         // Store the initial state to both the redux store and the storage, set connected to true
         dispatch(connectServer());
@@ -426,7 +433,8 @@ class Widget extends Component {
               dispatch(emitUserMessage(message));
             }
           }
-        } if (connectOn === 'mount' && tooltipPayload) {
+        }
+        if (connectOn === 'mount' && tooltipPayload) {
           this.tooltipTimeout = setTimeout(() => {
             this.trySendTooltipPayload();
           }, parseInt(tooltipDelay, 10));
@@ -462,7 +470,7 @@ class Widget extends Component {
       isChatVisible,
       embedded,
       connected,
-      dispatch
+      dispatch,
     } = this.props;
 
     // Send initial payload when chat is opened or widget is shown
@@ -482,16 +490,10 @@ class Widget extends Component {
   }
 
   trySendTooltipPayload() {
-    const {
-      tooltipPayload,
-      socket,
-      customData,
-      connected,
-      isChatOpen,
-      dispatch,
-      tooltipSent
-    } = this.props;
+    const { tooltipPayload, socket, customData, connected, isChatOpen, dispatch, tooltipSent } =
+      this.props;
 
+    // eslint-disable-next-line react/prop-types
     if (connected && !isChatOpen && !tooltipSent.get(tooltipPayload)) {
       const sessionId = this.getSessionId();
 
@@ -504,12 +506,8 @@ class Widget extends Component {
     }
   }
 
-  toggleConversation() {
-    const {
-      isChatOpen,
-      dispatch,
-      disableTooltips
-    } = this.props;
+  toggleChat() {
+    const { isChatOpen, dispatch, disableTooltips } = this.props;
     if (isChatOpen && this.delayedMessage) {
       if (!disableTooltips) dispatch(showTooltip(true));
       clearTimeout(this.messageDelayTimeout);
@@ -526,14 +524,15 @@ class Widget extends Component {
       this.messages = [];
       this.delayedMessage = null;
     } else {
-      this.props.dispatch(showTooltip(false));
+      dispatch(showTooltip(false));
     }
     clearTimeout(this.tooltipTimeout);
     dispatch(toggleChat());
   }
 
   toggleFullScreen() {
-    this.props.dispatch(toggleFullScreen());
+    const { dispatch } = this.props;
+    dispatch(toggleFullScreen());
   }
 
   dispatchMessage(message) {
@@ -541,59 +540,99 @@ class Widget extends Component {
       return;
     }
     const { customCss, ...messageClean } = message;
+    const { dispatch, customComponent } = this.props;
 
     if (isText(messageClean)) {
-      this.props.dispatch(addResponseMessage(messageClean.text));
+      dispatch(addResponseMessage(messageClean.text));
     } else if (isButtons(messageClean)) {
-      this.props.dispatch(addButtons(messageClean));
+      dispatch(addButtons(messageClean));
     } else if (isCarousel(messageClean)) {
-      this.props.dispatch(
-        addCarousel(messageClean)
-      );
+      dispatch(addCarousel(messageClean));
     } else if (isVideo(messageClean)) {
       const element = messageClean.attachment.payload;
-      this.props.dispatch(
+      dispatch(
         addVideoSnippet({
           title: element.title,
-          video: element.src
+          video: element.src,
         })
       );
     } else if (isImage(messageClean)) {
       const element = messageClean.attachment.payload;
-      this.props.dispatch(
+      dispatch(
         addImageSnippet({
           title: element.title,
-          image: element.src
+          image: element.src,
         })
       );
     } else {
       // some custom message
       const props = messageClean;
-      if (this.props.customComponent) {
-        this.props.dispatch(renderCustomComponent(this.props.customComponent, props, true));
+      if (customComponent) {
+        dispatch(renderCustomComponent(customComponent, props, true));
       }
     }
     if (customCss) {
-      this.props.dispatch(setCustomCss(message.customCss));
+      dispatch(setCustomCss(message.customCss));
     }
   }
 
   handleMessageSubmit(event) {
     event.preventDefault();
+    const { dispatch } = this.props;
     const userUttered = event.target.message.value;
     if (userUttered) {
-      this.props.dispatch(addUserMessage(userUttered));
-      this.props.dispatch(emitUserMessage(userUttered));
+      dispatch(addUserMessage(userUttered));
+      dispatch(emitUserMessage(userUttered));
     }
     event.target.message.value = '';
+  }
+
+  handleResetChat() {
+    const {
+      resetChatCancelButton,
+      resetChatConfirmButton,
+      resetChatConfirmSubtitle,
+      resetChatConfirmTitle,
+    } = this.props;
+
+    // Open confirmation dialog
+    return ConfirmDialog(
+      resetChatConfirmTitle,
+      resetChatConfirmSubtitle,
+      resetChatConfirmButton,
+      this.resetChat,
+      resetChatCancelButton,
+      () => {}
+    );
+  }
+
+  resetChat() {
+    const { dispatch, socket, initPayload, resetPayload, customData, restartOnChatReset } =
+      this.props;
+    dispatch(dropMessages());
+
+    if (restartOnChatReset) {
+      const sessionId = this.getSessionId();
+      // check that session_id is confirmed
+      if (!sessionId) return;
+
+      // Resend initial payload to restart the conversation
+      // eslint-disable-next-line no-console
+      console.log('sending init payload', sessionId);
+      socket.emit('user_uttered', {
+        message: resetPayload || initPayload,
+        customData,
+        session_id: sessionId,
+      });
+    }
   }
 
   render() {
     return (
       <WidgetLayout
-        toggleChat={() => this.toggleConversation()}
+        toggleChat={() => this.toggleChat()}
         toggleFullScreen={() => this.toggleFullScreen()}
-        onSendMessage={event => this.handleMessageSubmit(event)}
+        onSendMessage={(event) => this.handleMessageSubmit(event)}
         title={this.props.title}
         subtitle={this.props.subtitle}
         customData={this.props.customData}
@@ -614,12 +653,15 @@ class Widget extends Component {
         displayUnreadCount={this.props.displayUnreadCount}
         showMessageDate={this.props.showMessageDate}
         tooltipPayload={this.props.tooltipPayload}
+        resetChat={() => this.handleResetChat()}
+        restartOnChatReset={this.props.restartOnChatReset}
+        showResetChatButton={this.props.showResetChatButton}
       />
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   initialized: state.behavior.get('initialized'),
   connected: state.behavior.get('connected'),
   isChatOpen: state.behavior.get('isChatOpen'),
@@ -629,7 +671,7 @@ const mapStateToProps = state => ({
   oldUrl: state.behavior.get('oldUrl'),
   pageChangeCallbacks: state.behavior.get('pageChangeCallbacks'),
   domHighlight: state.metadata.get('domHighlight'),
-  messages: state.messages
+  messages: state.messages,
 });
 
 Widget.propTypes = {
@@ -646,8 +688,22 @@ Widget.propTypes = {
   fullScreenMode: PropTypes.bool,
   isChatVisible: PropTypes.bool,
   isChatOpen: PropTypes.bool,
+  showResetChatButton: PropTypes.bool,
+  resetPayload: PropTypes.string,
+  restartOnChatReset: PropTypes.bool,
+  resetChatConfirmTitle: PropTypes.string,
+  resetChatConfirmSubtitle: PropTypes.string,
+  resetChatConfirmButton: PropTypes.string,
+  resetChatCancelButton: PropTypes.string,
   badge: PropTypes.number,
-  socket: PropTypes.shape({}),
+  socket: PropTypes.shape({
+    on: PropTypes.func,
+    close: PropTypes.func,
+    createSocket: PropTypes.func,
+    emit: PropTypes.func,
+    isInitialized: PropTypes.func,
+    updateSocketCustomData: PropTypes.func,
+  }),
   embedded: PropTypes.bool,
   params: PropTypes.shape({}),
   connected: PropTypes.bool,
@@ -663,27 +719,38 @@ Widget.propTypes = {
   tooltipSent: PropTypes.shape({}),
   tooltipDelay: PropTypes.number.isRequired,
   domHighlight: PropTypes.shape({}),
-  storage: PropTypes.shape({}),
+  storage: PropTypes.shape({
+    removeItem: PropTypes.func,
+  }),
+  // eslint-disable-next-line react/no-unused-prop-types
+  oldUrl: PropTypes.string,
   disableTooltips: PropTypes.bool,
   defaultHighlightAnimation: PropTypes.string,
   defaultHighlightCss: PropTypes.string,
   defaultHighlightClassname: PropTypes.string,
-  messages: ImmutablePropTypes.listOf(ImmutablePropTypes.map)
+  messages: ImmutablePropTypes.listOf(ImmutablePropTypes.map),
 };
 
 Widget.defaultProps = {
   isChatOpen: false,
   isChatVisible: true,
+  showResetChatButton: false,
   fullScreenMode: false,
   connectOn: 'mount',
   autoClearCache: false,
   displayUnreadCount: false,
   tooltipPayload: null,
+  restartOnChatReset: true,
+  resetChatConfirmTitle: 'Delete conversation history',
+  resetChatConfirmSubtitle: 'Delete history and restart conversation. This operation cannot be undone',
+  resetChatConfirmButton: 'Delete',
+  resetChatCancelButton: 'Cancel',
   inputTextFieldHint: 'Type a message...',
   oldUrl: '',
   disableTooltips: false,
   defaultHighlightClassname: '',
-  defaultHighlightCss: 'animation: 0.5s linear infinite alternate default-botfront-blinker-animation; outline-style: solid;',
+  defaultHighlightCss:
+    'animation: 0.5s linear infinite alternate default-botfront-blinker-animation; outline-style: solid;',
   // unfortunately it looks like outline-style is not an animatable property on Safari
   defaultHighlightAnimation: `@keyframes default-botfront-blinker-animation {
     0% {
@@ -698,7 +765,7 @@ Widget.defaultProps = {
     100% {
       outline-color: green;
     }
-  }`
+  }`,
 };
 
 export default connect(mapStateToProps, null, null, { forwardRef: true })(Widget);

@@ -9,84 +9,84 @@ import socket from './socket';
 import ThemeContext from './components/Widget/ThemeContext';
 // eslint-disable-next-line import/no-mutable-exports
 
-const ConnectedWidget = forwardRef((props, ref) => {
-  class Socket {
-    constructor(
-      url,
-      customData,
-      path,
-      protocol,
-      protocolOptions,
-      onSocketEvent
-    ) {
-      this.url = url;
-      this.customData = customData;
-      this.path = path;
-      this.protocol = protocol;
-      this.protocolOptions = protocolOptions;
-      this.onSocketEvent = onSocketEvent;
-      this.socket = null;
-      this.onEvents = [];
-      this.marker = Math.random();
-    }
+class Socket {
+  constructor(
+    url,
+    customData,
+    path,
+    protocol,
+    protocolOptions,
+    onSocketEvent
+  ) {
+    this.url = url;
+    this.customData = customData;
+    this.path = path;
+    this.protocol = protocol;
+    this.protocolOptions = protocolOptions;
+    this.onSocketEvent = onSocketEvent;
+    this.socket = null;
+    this.onEvents = [];
+    this.marker = Math.random();
+  }
 
-    isInitialized() {
-      return this.socket !== null && this.socket.connected;
-    }
+  isInitialized() {
+    return this.socket !== null && this.socket.connected;
+  }
 
-    on(event, callback) {
-      if (!this.socket) {
-        this.onEvents.push({ event, callback });
-      } else {
-        this.socket.on(event, callback);
-      }
-    }
-
-    emit(message, data) {
-      if (this.socket) {
-        this.socket.emit(message, data);
-      }
-    }
-
-    close() {
-      if (this.socket) {
-        this.socket.close();
-      }
-    }
-
-    updateSocketCustomData(data) {
-      if (this.socket) {
-        this.customData = { ...this.customData, ...data };
-      }
-    }
-
-    createSocket() {
-      this.socket = socket(
-        this.url,
-        this.customData,
-        this.path,
-        this.protocol,
-        this.protocolOptions
-      );
-      // We set a function on session_confirm here so as to avoid any race condition
-      // this will be called first and will set those parameters for everyone to use.
-      this.socket.on('session_confirm', (sessionObject) => {
-        this.sessionConfirmed = true;
-        this.sessionId = (sessionObject && sessionObject.session_id)
-          ? sessionObject.session_id
-          : sessionObject;
-      });
-      this.onEvents.forEach((event) => {
-        this.socket.on(event.event, event.callback);
-      });
-
-      this.onEvents = [];
-      Object.keys(this.onSocketEvent).forEach((event) => {
-        this.socket.on(event, this.onSocketEvent[event]);
-      });
+  on(event, callback) {
+    if (!this.socket) {
+      this.onEvents.push({ event, callback });
+    } else {
+      this.socket.on(event, callback);
     }
   }
 
+  emit(message, data) {
+    if (this.socket) {
+      this.socket.emit(message, data);
+    }
+  }
+
+  close() {
+    if (this.socket) {
+      this.socket.close();
+    }
+  }
+
+  updateSocketCustomData(data) {
+    if (this.socket) {
+      this.customData = { ...this.customData, ...data };
+    }
+  }
+
+  createSocket() {
+    this.socket = socket(
+      this.url,
+      this.customData,
+      this.path,
+      this.protocol,
+      this.protocolOptions
+    );
+    // We set a function on session_confirm here so as to avoid any race condition
+    // this will be called first and will set those parameters for everyone to use.
+    this.socket.on('session_confirm', (sessionObject) => {
+      this.sessionConfirmed = true;
+      this.sessionId = (sessionObject && sessionObject.session_id)
+        ? sessionObject.session_id
+        : sessionObject;
+    });
+    this.onEvents.forEach((event) => {
+      this.socket.on(event.event, event.callback);
+    });
+
+    this.onEvents = [];
+    Object.keys(this.onSocketEvent).forEach((event) => {
+      this.socket.on(event, this.onSocketEvent[event]);
+    });
+  }
+}
+
+const ConnectedWidget = forwardRef((props, ref) => {
   const instanceSocket = useRef({});
   const store = useRef(null);
 
@@ -129,6 +129,7 @@ const ConnectedWidget = forwardRef((props, ref) => {
           assistTextColor: props.assistTextColor,
           assistBackgroundColor: props.assistBackgroundColor,
           showCarouselImages: props.showCarouselImages,
+          showIconsOnWeblinks: props.showIconsOnWeblinks,
           carouselCardsBackground: props.carouselCardsBackground,
           carouselCardsTextColor: props.carouselCardsTextColor,
           carouselCardsButtonBackground: props.carouselCardsButtonBackground,
@@ -146,6 +147,13 @@ const ConnectedWidget = forwardRef((props, ref) => {
           profileAvatar={props.profileAvatar}
           showCloseButton={props.showCloseButton}
           showFullScreenButton={props.showFullScreenButton}
+          showResetChatButton={props.showResetChatButton}
+          restartOnChatReset={props.restartOnChatReset}
+          resetPayload={props.resetPayload}
+          resetChatConfirmTitle={props.resetChatConfirmTitle}
+          resetChatConfirmSubtitle={props.resetChatConfirmSubtitle}
+          resetChatConfirmButton={props.resetChatConfirmButton}
+          resetChatCancelButton={props.resetChatCancelButton}
           hideWhenNotConnected={props.hideWhenNotConnected}
           connectOn={props.connectOn}
           autoClearCache={props.autoClearCache}
@@ -189,6 +197,13 @@ ConnectedWidget.propTypes = {
   connectingText: PropTypes.string,
   showCloseButton: PropTypes.bool,
   showFullScreenButton: PropTypes.bool,
+  showResetChatButton: PropTypes.bool,
+  restartOnChatReset: PropTypes.bool,
+  resetPayload: PropTypes.string,
+  resetChatConfirmTitle: PropTypes.string,
+  resetChatConfirmSubtitle: PropTypes.string,
+  resetChatConfirmButton: PropTypes.string,
+  resetChatCancelButton: PropTypes.string,
   hideWhenNotConnected: PropTypes.bool,
   connectOn: PropTypes.oneOf(['mount', 'open']),
   autoClearCache: PropTypes.bool,
@@ -212,6 +227,7 @@ ConnectedWidget.propTypes = {
     onChatClose: PropTypes.func,
     onChatVisible: PropTypes.func,
     onChatHidden: PropTypes.func,
+    onChatReset: PropTypes.func,
   }),
   disableTooltips: PropTypes.bool,
   defaultHighlightCss: PropTypes.string,
@@ -224,6 +240,7 @@ ConnectedWidget.propTypes = {
   assistTextColor: PropTypes.string,
   assistBackgroundColor: PropTypes.string,
   showCarouselImages: PropTypes.bool,
+  showIconsOnWeblinks: PropTypes.bool,
   carouselCardsBackground: PropTypes.string,
   carouselCardsTextColor: PropTypes.string,
   carouselCardsButtonBackground: PropTypes.string,
@@ -254,6 +271,8 @@ ConnectedWidget.defaultProps = {
   docViewer: false,
   showCloseButton: true,
   showFullScreenButton: false,
+  showResetChatButton: false,
+  restartOnChatReset: true,
   displayUnreadCount: false,
   showMessageDate: false,
   customMessageDelay: (message) => {
@@ -269,6 +288,7 @@ ConnectedWidget.defaultProps = {
     onChatClose: () => {},
     onChatVisible: () => {},
     onChatHidden: () => {},
+    onChatReset: () => {},
   },
   disableTooltips: false,
   mainColor: '',
@@ -277,6 +297,7 @@ ConnectedWidget.defaultProps = {
   userBackgroundColor: '',
   assistTextColor: '',
   assistBackgroundColor: '',
+  showIconsOnWeblinks: true,
   showCarouselImages: true,
   carouselCardsBackground: '',
   carouselCardsTextColor: '',

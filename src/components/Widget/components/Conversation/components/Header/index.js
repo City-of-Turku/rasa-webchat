@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faHistory } from '@fortawesome/free-solid-svg-icons';
 import close from 'assets/clear-button.svg';
 import fullscreen from 'assets/fullscreen_button.svg';
 import fullscreenExit from 'assets/fullscreen_exit_button.svg';
@@ -18,7 +19,10 @@ const Header = ({
   connected,
   connectingText,
   closeImage,
-  profileAvatar
+  profileAvatar,
+  resetChat,
+  restartOnChatReset,
+  showResetChatButton
 }) => {
   const { mainColor } = useContext(ThemeContext);
   return (
@@ -31,8 +35,19 @@ const Header = ({
         }
         <div className="rw-header-buttons">
           {
+            showResetChatButton &&
+            <button
+              type='button'
+              style={{ background: 'inherit' }}
+              className='rw-delete-history-button'
+              aria-label='Clear conversation history'
+              onClick={resetChat}>
+              <FontAwesomeIcon icon={restartOnChatReset ? faHistory : faTrash} className='rw-delete-history rw-default' />
+            </button>
+          }
+          {
             showFullScreenButton &&
-            <button className="rw-toggle-fullscreen-button" onClick={toggleFullScreen}>
+            <button type='button' className="rw-toggle-fullscreen-button" onClick={toggleFullScreen}>
               <img
                 className={`rw-toggle-fullscreen ${fullScreenMode ? 'rw-fullScreenExitImage' : 'rw-fullScreenImage'}`}
                 src={fullScreenMode ? fullscreenExit : fullscreen}
@@ -42,7 +57,7 @@ const Header = ({
           }
           {
             showCloseButton &&
-            <button className="rw-close-button" onClick={toggleChat}>
+            <button type='button' className="rw-close-button" onClick={toggleChat}>
               <img
                 className={`rw-close ${closeImage ? '' : 'rw-default'}`}
                 src={closeImage || close}
@@ -74,7 +89,10 @@ Header.propTypes = {
   connected: PropTypes.bool,
   connectingText: PropTypes.string,
   closeImage: PropTypes.string,
-  profileAvatar: PropTypes.string
+  profileAvatar: PropTypes.string,
+  resetChat: PropTypes.func,
+  restartOnChatReset: PropTypes.bool,
+  showResetChatButton: PropTypes.bool
 };
 
 export default Header;

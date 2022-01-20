@@ -32,6 +32,7 @@ describe('Metadata store affect app behavior', () => {
         connectOn="open"
         customMessageDelay={() => {}}
         connected
+        tooltipDelay={0}
         isChatOpen={false}
         disableTooltips /* whithout this the tests about domHighlight fails, as it tries to display the tooltip it also apply the styles.
         and some how the styles applied in the test are wrong, but trying the same behavior on the real webchat does not create any issue
