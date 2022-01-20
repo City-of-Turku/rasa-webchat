@@ -55,8 +55,8 @@ class Widget extends Component {
     this.updateSocketCustomData = this.updateSocketCustomData.bind(this);
     this.intervalId = null;
     this.eventListenerCleaner = () => {};
-    this.handleDeleteConversationHistory = this.handleDeleteConversationHistory.bind(this);
-    this.deleteConversationHistory = this.deleteConversationHistory.bind(this);
+    this.handleResetChat = this.handleResetChat.bind(this);
+    this.resetChat = this.resetChat.bind(this);
   }
 
   componentDidMount() {
@@ -506,7 +506,7 @@ class Widget extends Component {
     }
   }
 
-  toggleConversation() {
+  toggleChat() {
     const { isChatOpen, dispatch, disableTooltips } = this.props;
     if (isChatOpen && this.delayedMessage) {
       if (!disableTooltips) dispatch(showTooltip(true));
@@ -587,34 +587,50 @@ class Widget extends Component {
     event.target.message.value = '';
   }
 
-  handleDeleteConversationHistory() {
+  handleResetChat() {
     const {
-      deleteHistoryCancelButton,
-      deleteHistoryConfirmButton,
-      deleteHistoryConfirmSubtitle,
-      deleteHistoryConfirmTitle,
+      resetChatCancelButton,
+      resetChatConfirmButton,
+      resetChatConfirmSubtitle,
+      resetChatConfirmTitle,
     } = this.props;
 
     // Open confirmation dialog
     return ConfirmDialog(
-      deleteHistoryConfirmTitle,
-      deleteHistoryConfirmSubtitle,
-      deleteHistoryConfirmButton,
-      this.deleteConversationHistory,
-      deleteHistoryCancelButton,
+      resetChatConfirmTitle,
+      resetChatConfirmSubtitle,
+      resetChatConfirmButton,
+      this.resetChat,
+      resetChatCancelButton,
       () => {}
     );
   }
 
-  deleteConversationHistory() {
-    const { dispatch } = this.props;
+  resetChat() {
+    const { dispatch, socket, initPayload, resetPayload, customData, restartOnChatReset } =
+      this.props;
     dispatch(dropMessages());
+
+    if (restartOnChatReset) {
+      const sessionId = this.getSessionId();
+      // check that session_id is confirmed
+      if (!sessionId) return;
+
+      // Resend initial payload to restart the conversation
+      // eslint-disable-next-line no-console
+      console.log('sending init payload', sessionId);
+      socket.emit('user_uttered', {
+        message: resetPayload || initPayload,
+        customData,
+        session_id: sessionId,
+      });
+    }
   }
 
   render() {
     return (
       <WidgetLayout
-        toggleChat={() => this.toggleConversation()}
+        toggleChat={() => this.toggleChat()}
         toggleFullScreen={() => this.toggleFullScreen()}
         onSendMessage={(event) => this.handleMessageSubmit(event)}
         title={this.props.title}
@@ -637,8 +653,9 @@ class Widget extends Component {
         displayUnreadCount={this.props.displayUnreadCount}
         showMessageDate={this.props.showMessageDate}
         tooltipPayload={this.props.tooltipPayload}
-        deleteHistory={() => this.handleDeleteConversationHistory()}
-        showDeleteHistoryButton={this.props.showDeleteHistoryButton}
+        resetChat={() => this.handleResetChat()}
+        restartOnChatReset={this.props.restartOnChatReset}
+        showResetChatButton={this.props.showResetChatButton}
       />
     );
   }
@@ -671,11 +688,13 @@ Widget.propTypes = {
   fullScreenMode: PropTypes.bool,
   isChatVisible: PropTypes.bool,
   isChatOpen: PropTypes.bool,
-  showDeleteHistoryButton: PropTypes.bool,
-  deleteHistoryConfirmTitle: PropTypes.string,
-  deleteHistoryConfirmSubtitle: PropTypes.string,
-  deleteHistoryConfirmButton: PropTypes.string,
-  deleteHistoryCancelButton: PropTypes.string,
+  showResetChatButton: PropTypes.bool,
+  resetPayload: PropTypes.string,
+  restartOnChatReset: PropTypes.bool,
+  resetChatConfirmTitle: PropTypes.string,
+  resetChatConfirmSubtitle: PropTypes.string,
+  resetChatConfirmButton: PropTypes.string,
+  resetChatCancelButton: PropTypes.string,
   badge: PropTypes.number,
   socket: PropTypes.shape({
     on: PropTypes.func,
@@ -715,16 +734,17 @@ Widget.propTypes = {
 Widget.defaultProps = {
   isChatOpen: false,
   isChatVisible: true,
-  showDeleteHistoryButton: false,
+  showResetChatButton: false,
   fullScreenMode: false,
   connectOn: 'mount',
   autoClearCache: false,
   displayUnreadCount: false,
   tooltipPayload: null,
-  deleteHistoryConfirmTitle: 'Delete conversation history',
-  deleteHistoryConfirmSubtitle: 'This operation cannot be undone',
-  deleteHistoryConfirmButton: 'Delete',
-  deleteHistoryCancelButton: 'Cancel',
+  restartOnChatReset: true,
+  resetChatConfirmTitle: 'Delete conversation history',
+  resetChatConfirmSubtitle: 'Delete history and restart conversation. This operation cannot be undone',
+  resetChatConfirmButton: 'Delete',
+  resetChatCancelButton: 'Cancel',
   inputTextFieldHint: 'Type a message...',
   oldUrl: '',
   disableTooltips: false,

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faHistory } from '@fortawesome/free-solid-svg-icons';
 import close from 'assets/clear-button.svg';
 import fullscreen from 'assets/fullscreen_button.svg';
 import fullscreenExit from 'assets/fullscreen_exit_button.svg';
@@ -20,10 +20,11 @@ const Header = ({
   connectingText,
   closeImage,
   profileAvatar,
-  deleteHistory,
-  showDeleteHistoryButton
+  resetChat,
+  restartOnChatReset,
+  showResetChatButton
 }) => {
-  const { mainColor, userBackgroundColor } = useContext(ThemeContext);
+  const { mainColor } = useContext(ThemeContext);
   return (
     <div className="rw-header-and-loading">
       <div style={{ backgroundColor: mainColor }}className={`rw-header ${subtitle ? 'rw-with-subtitle' : ''}`}>
@@ -34,14 +35,14 @@ const Header = ({
         }
         <div className="rw-header-buttons">
           {
-            showDeleteHistoryButton &&
+            showResetChatButton &&
             <button
               type='button'
               style={{ background: 'inherit' }}
               className='rw-delete-history-button'
               aria-label='Clear conversation history'
-              onClick={deleteHistory}>
-              <FontAwesomeIcon icon={faTrash} className='rw-delete-history rw-default' />
+              onClick={resetChat}>
+              <FontAwesomeIcon icon={restartOnChatReset ? faHistory : faTrash} className='rw-delete-history rw-default' />
             </button>
           }
           {
@@ -89,8 +90,9 @@ Header.propTypes = {
   connectingText: PropTypes.string,
   closeImage: PropTypes.string,
   profileAvatar: PropTypes.string,
-  deleteHistory: PropTypes.func,
-  showDeleteHistoryButton: PropTypes.bool
+  resetChat: PropTypes.func,
+  restartOnChatReset: PropTypes.bool,
+  showResetChatButton: PropTypes.bool
 };
 
 export default Header;

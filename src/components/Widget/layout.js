@@ -43,8 +43,9 @@ const WidgetLayout = (props) => {
           customComponent={props.customComponent}
           showMessageDate={props.showMessageDate}
           inputTextFieldHint={props.inputTextFieldHint}
-          deleteHistory={props.deleteHistory}
-          showDeleteHistoryButton={props.showDeleteHistoryButton}
+          resetChat={props.resetChat}
+          restartOnChatReset={props.restartOnChatReset}
+          showResetChatButton={props.showResetChatButton}
           embedded={props.embedded}
         />
       )}
@@ -98,8 +99,9 @@ WidgetLayout.propTypes = {
   displayUnreadCount: PropTypes.bool,
   showMessageDate: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   tooltipPayload: PropTypes.string,
-  deleteHistory: PropTypes.func,
-  showDeleteHistoryButton: PropTypes.bool,
+  resetChat: PropTypes.func,
+  restartOnChatReset: PropTypes.bool,
+  showResetChatButton: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(WidgetLayout);
