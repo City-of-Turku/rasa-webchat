@@ -146,7 +146,7 @@ class Messages extends Component {
     const { conversationBackgroundColor, assistBackgroundColor, userBackgroundColor } = this.context;
 
     return (
-      <div id='rw-messages' style={{ backgroundColor: conversationBackgroundColor }} className='rw-messages-container'>
+      <div id='rw-messages' style={{ backgroundColor: conversationBackgroundColor, overflowY: showResetChatButton ? 'scroll' : 'auto' }} className='rw-messages-container'>
         {showResetChatButton && <button
           type='button'
           style={{ color: userBackgroundColor, backgroundColor: conversationBackgroundColor }}

@@ -91,14 +91,16 @@
     background-color: $white; // Same default color as for conversation background
     color: $tertiary;
     box-shadow: 0px 2px 8px 4px rgba(200, 200, 200, 0.45);
-    position: fixed;
+    position: absolute;
     z-index: 2;
-    right: 20px;
+    right: 25px;
+    margin-top: 0;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       box-shadow: 0px 3px 8px 4px rgba(200, 200, 200, 0.3);
     }
-    
+
     svg {
       font-size: 18px;
       height: 20px;
@@ -111,7 +113,9 @@
     height: 40px;
     width: 40px;
 
-    &:focus, &:active, &:hover {
+    &:focus,
+    &:active,
+    &:hover {
       svg {
         height: 24px;
       }
@@ -139,13 +143,14 @@ div#wave {
   height: 13px;
   margin-left: auto;
   margin-right: auto;
+
   .#{$namespace}dot {
     opacity: 0.4;
-    display:inline-block;
-    width:5px;
-    height:5px;
-    border-radius:50%;
-    margin-right:3px;
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-right: 3px;
     background: #000000;
     animation: wave 1.6s linear infinite;
 
@@ -160,7 +165,10 @@ div#wave {
 }
 
 @keyframes wave {
-  0%, 60%, 100% {
+
+  0%,
+  60%,
+  100% {
     transform: initial;
   }
 
