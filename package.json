@@ -1,6 +1,6 @@
 {
   "name": "@city-of-turku/rasa-webchat",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Chat web widget for React apps and Rasa Core chatbots",
   "module": "module/index.js",
   "main": "lib/index.js",
