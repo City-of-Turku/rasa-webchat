@@ -607,7 +607,8 @@ class Widget extends Component {
   }
 
   resetChat() {
-    const { dispatch, socket, initPayload, customData, restartOnChatReset } = this.props;
+    const { dispatch, socket, initPayload, resetPayload, customData, restartOnChatReset } =
+      this.props;
     dispatch(dropMessages());
 
     if (restartOnChatReset) {
@@ -618,7 +619,11 @@ class Widget extends Component {
       // Resend initial payload to restart the conversation
       // eslint-disable-next-line no-console
       console.log('sending init payload', sessionId);
-      socket.emit('user_uttered', { message: initPayload, customData, session_id: sessionId });
+      socket.emit('user_uttered', {
+        message: resetPayload || initPayload,
+        customData,
+        session_id: sessionId,
+      });
     }
   }
 
@@ -684,6 +689,7 @@ Widget.propTypes = {
   isChatVisible: PropTypes.bool,
   isChatOpen: PropTypes.bool,
   showResetChatButton: PropTypes.bool,
+  resetPayload: PropTypes.string,
   restartOnChatReset: PropTypes.bool,
   resetChatConfirmTitle: PropTypes.string,
   resetChatConfirmSubtitle: PropTypes.string,

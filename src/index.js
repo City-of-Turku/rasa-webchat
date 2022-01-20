@@ -149,6 +149,7 @@ const ConnectedWidget = forwardRef((props, ref) => {
           showFullScreenButton={props.showFullScreenButton}
           showResetChatButton={props.showResetChatButton}
           restartOnChatReset={props.restartOnChatReset}
+          resetPayload={props.resetPayload}
           resetChatConfirmTitle={props.resetChatConfirmTitle}
           resetChatConfirmSubtitle={props.resetChatConfirmSubtitle}
           resetChatConfirmButton={props.resetChatConfirmButton}
@@ -198,6 +199,7 @@ ConnectedWidget.propTypes = {
   showFullScreenButton: PropTypes.bool,
   showResetChatButton: PropTypes.bool,
   restartOnChatReset: PropTypes.bool,
+  resetPayload: PropTypes.string,
   resetChatConfirmTitle: PropTypes.string,
   resetChatConfirmSubtitle: PropTypes.string,
   resetChatConfirmButton: PropTypes.string,
