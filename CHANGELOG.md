@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://https//github.com/City-of-Turku/rasa-webchat/compare/v1.1.0...v1.2.0) (2022-01-20)
+
+
+### Features
+
+* change card carousel for better mobile support ([#10](https://https//github.com/City-of-Turku/rasa-webchat/issues/10)) ([dcfefd7](https://https//github.com/City-of-Turku/rasa-webchat/commit/dcfefd70cc41aa3cc6450e597fb3629b72a44f9b))
+* change to nuka carousel for better mobile support ([30e5d8d](https://https//github.com/City-of-Turku/rasa-webchat/commit/30e5d8dae9c465aa34a7558227c745687dde8a86))
+
+
+### Bug Fixes
+
+* expose delete history text properties ([c7ab604](https://https//github.com/City-of-Turku/rasa-webchat/commit/c7ab604e93df9e1f89e1c1609ea5123aae39f2ac))
+
+## [1.1.0](https://https//github.com/City-of-Turku/rasa-webchat/compare/v1.0.3...v1.1.0) (2022-01-04)
+
+
+### Features
+
+* change card carousel for better mobile support ([#11](https://https//github.com/City-of-Turku/rasa-webchat/issues/11)) ([74eda67](https://https//github.com/City-of-Turku/rasa-webchat/commit/74eda67771730a51694382dea6cfd3450768379c)), closes [#9](https://https//github.com/City-of-Turku/rasa-webchat/issues/9) [#10](https://https//github.com/City-of-Turku/rasa-webchat/issues/10)
+
 ### [1.0.3](https://https//github.com/botfront/rasa-webchat/compare/v1.0.1...v1.0.3) (2021-11-04)
 
 
