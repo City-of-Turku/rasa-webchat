@@ -40,7 +40,7 @@ import { safeQuerySelectorAll } from 'utils/dom';
 import { SESSION_NAME, NEXT_MESSAGE } from 'constants';
 import { isVideo, isImage, isButtons, isText, isCarousel } from './msgProcessor';
 import WidgetLayout from './layout';
-import { storeLocalSession, getLocalSession } from '../../store/reducers/helper';
+import { storeLocalSession, getLocalSession, deleteMessagesFrom } from '../../store/reducers/helper';
 import ConfirmDialog from './components/ConfirmDialog';
 
 class Widget extends Component {
@@ -607,15 +607,30 @@ class Widget extends Component {
   }
 
   resetChat() {
-    const { dispatch, socket, initPayload, resetPayload, customData, restartOnChatReset } =
-      this.props;
+    const {
+      customData,
+      dispatch,
+      initPayload,
+      newIdOnChatReset,
+      resetPayload,
+      restartOnChatReset,
+      socket,
+      storage,
+    } = this.props;
+
     dispatch(dropMessages());
+    deleteMessagesFrom(storage)
 
-    if (restartOnChatReset) {
+    if (newIdOnChatReset) {
+      // Delete storage data and restart socket connection
+      // to get new sessionId
+      socket.close();
+      storage.removeItem(SESSION_NAME);
+      this.initPayload = resetPayload || initPayload;
+      this.initializeWidget(restartOnChatReset);
+    } else if (restartOnChatReset) {
       const sessionId = this.getSessionId();
-      // check that session_id is confirmed
       if (!sessionId) return;
-
       // Resend initial payload to restart the conversation
       // eslint-disable-next-line no-console
       console.log('sending init payload', sessionId);
@@ -655,6 +670,7 @@ class Widget extends Component {
         tooltipPayload={this.props.tooltipPayload}
         resetChat={() => this.handleResetChat()}
         restartOnChatReset={this.props.restartOnChatReset}
+        newIdOnChatReset={this.props.newIdOnChatReset}
         showResetChatButton={this.props.showResetChatButton}
       />
     );
@@ -691,6 +707,7 @@ Widget.propTypes = {
   showResetChatButton: PropTypes.bool,
   resetPayload: PropTypes.string,
   restartOnChatReset: PropTypes.bool,
+  newIdOnChatReset: PropTypes.bool,
   resetChatConfirmTitle: PropTypes.string,
   resetChatConfirmSubtitle: PropTypes.string,
   resetChatConfirmButton: PropTypes.string,

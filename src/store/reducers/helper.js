@@ -140,6 +140,16 @@ export const storeMessageTo = storage => (conversation) => {
   return conversation;
 };
 
+export function deleteMessagesFrom (storage) {
+  const localSession = getLocalSession(storage, SESSION_NAME);
+  const newSession = {
+    ...localSession,
+    conversation: [],
+    lastUpdate: Date.now()
+  }
+  storage.setItem(SESSION_NAME, JSON.stringify(newSession));
+}
+
 export const storeParamsTo = storage => (params) => {
   // Store a params List to storage
   const localSession = getLocalSession(storage, SESSION_NAME);
