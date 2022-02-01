@@ -377,6 +377,7 @@ class Widget extends Component {
       tooltipDelay,
     } = this.props;
     if (!socket.isInitialized()) {
+      console.log('IN initializeWidget');
       socket.createSocket();
 
       socket.on('bot_uttered', (botUttered) => {
@@ -413,13 +414,17 @@ class Widget extends Component {
         if (localId !== remoteId) {
           // storage.clear();
           // Store the received session_id to storage
+          console.log('Update session data');
 
           storeLocalSession(storage, SESSION_NAME, remoteId);
           dispatch(pullSession());
           if (sendInitPayload) {
+            console.log(`Send init payload ${this.initPayload}`);
             this.trySendInitPayload();
           }
         } else {
+          console.log('NOT SENDING initial payload');
+
           // If this is an existing session, it's possible we changed pages and want to send a
           // user message when we land.
           const nextMessage = window.localStorage.getItem(NEXT_MESSAGE);
