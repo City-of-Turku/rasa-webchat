@@ -40,7 +40,7 @@ import { safeQuerySelectorAll } from 'utils/dom';
 import { SESSION_NAME, NEXT_MESSAGE } from 'constants';
 import { isVideo, isImage, isButtons, isText, isCarousel } from './msgProcessor';
 import WidgetLayout from './layout';
-import { storeLocalSession, getLocalSession } from '../../store/reducers/helper';
+import { storeLocalSession, getLocalSession, deleteMessagesFrom } from '../../store/reducers/helper';
 import ConfirmDialog from './components/ConfirmDialog';
 
 class Widget extends Component {
@@ -57,6 +57,7 @@ class Widget extends Component {
     this.eventListenerCleaner = () => {};
     this.handleResetChat = this.handleResetChat.bind(this);
     this.resetChat = this.resetChat.bind(this);
+    
   }
 
   componentDidMount() {
@@ -365,7 +366,7 @@ class Widget extends Component {
     }
   }
 
-  initializeWidget(sendInitPayload = true) {
+  initializeWidget(sendInitPayload = true, resendInitialPayload = false) {
     const {
       storage,
       socket,
@@ -413,11 +414,10 @@ class Widget extends Component {
         if (localId !== remoteId) {
           // storage.clear();
           // Store the received session_id to storage
-
           storeLocalSession(storage, SESSION_NAME, remoteId);
           dispatch(pullSession());
           if (sendInitPayload) {
-            this.trySendInitPayload();
+            this.trySendInitPayload(resendInitialPayload);
           }
         } else {
           // If this is an existing session, it's possible we changed pages and want to send a
@@ -434,6 +434,7 @@ class Widget extends Component {
             }
           }
         }
+
         if (connectOn === 'mount' && tooltipPayload) {
           this.tooltipTimeout = setTimeout(() => {
             this.trySendTooltipPayload();
@@ -460,7 +461,7 @@ class Widget extends Component {
   // is erased. Then behavior on reload can be consistent with
   // behavior on first load
 
-  trySendInitPayload() {
+  trySendInitPayload(resendInitialPayload = false) {
     const {
       initPayload,
       customData,
@@ -471,10 +472,10 @@ class Widget extends Component {
       embedded,
       connected,
       dispatch,
+      resetPayload
     } = this.props;
-
     // Send initial payload when chat is opened or widget is shown
-    if (!initialized && connected && ((isChatOpen && isChatVisible) || embedded)) {
+    if ((!initialized || resendInitialPayload) && connected && ((isChatOpen && isChatVisible) || embedded)) {
       // Only send initial payload if the widget is connected to the server but not yet initialized
 
       const sessionId = this.getSessionId();
@@ -482,9 +483,12 @@ class Widget extends Component {
       // check that session_id is confirmed
       if (!sessionId) return;
 
+      const messageToSend =
+        initialized && resendInitialPayload && resetPayload ? resetPayload : initPayload;
+
       // eslint-disable-next-line no-console
       console.log('sending init payload', sessionId);
-      socket.emit('user_uttered', { message: initPayload, customData, session_id: sessionId });
+      socket.emit('user_uttered', { message: messageToSend, customData, session_id: sessionId });
       dispatch(initialize());
     }
   }
@@ -607,15 +611,30 @@ class Widget extends Component {
   }
 
   resetChat() {
-    const { dispatch, socket, initPayload, resetPayload, customData, restartOnChatReset } =
-      this.props;
+    const {
+      customData,
+      dispatch,
+      initPayload,
+      newIdOnChatReset,
+      resetPayload,
+      restartOnChatReset,
+      socket,
+      storage,
+    } = this.props;
+
     dispatch(dropMessages());
+    deleteMessagesFrom(storage)
 
-    if (restartOnChatReset) {
+    if (newIdOnChatReset) {
+      // Delete storage data and restart socket connection
+      // to get new sessionId
+      socket.close();
+      storage.removeItem(SESSION_NAME);
+      this.initializeWidget(true, true);
+    }
+    else if (restartOnChatReset) {
       const sessionId = this.getSessionId();
-      // check that session_id is confirmed
       if (!sessionId) return;
-
       // Resend initial payload to restart the conversation
       // eslint-disable-next-line no-console
       console.log('sending init payload', sessionId);
@@ -655,6 +674,7 @@ class Widget extends Component {
         tooltipPayload={this.props.tooltipPayload}
         resetChat={() => this.handleResetChat()}
         restartOnChatReset={this.props.restartOnChatReset}
+        newIdOnChatReset={this.props.newIdOnChatReset}
         showResetChatButton={this.props.showResetChatButton}
       />
     );
@@ -691,6 +711,7 @@ Widget.propTypes = {
   showResetChatButton: PropTypes.bool,
   resetPayload: PropTypes.string,
   restartOnChatReset: PropTypes.bool,
+  newIdOnChatReset: PropTypes.bool,
   resetChatConfirmTitle: PropTypes.string,
   resetChatConfirmSubtitle: PropTypes.string,
   resetChatConfirmButton: PropTypes.string,
