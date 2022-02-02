@@ -57,6 +57,7 @@ class Widget extends Component {
     this.eventListenerCleaner = () => {};
     this.handleResetChat = this.handleResetChat.bind(this);
     this.resetChat = this.resetChat.bind(this);
+    
   }
 
   componentDidMount() {
@@ -471,6 +472,7 @@ class Widget extends Component {
       embedded,
       connected,
       dispatch,
+      resetPayload
     } = this.props;
     // Send initial payload when chat is opened or widget is shown
     if ((!initialized || resendInitialPayload) && connected && ((isChatOpen && isChatVisible) || embedded)) {
@@ -481,9 +483,12 @@ class Widget extends Component {
       // check that session_id is confirmed
       if (!sessionId) return;
 
+      const messageToSend =
+        initialized && resendInitialPayload && resetPayload ? resetPayload : initPayload;
+
       // eslint-disable-next-line no-console
       console.log('sending init payload', sessionId);
-      socket.emit('user_uttered', { message: initPayload, customData, session_id: sessionId });
+      socket.emit('user_uttered', { message: messageToSend, customData, session_id: sessionId });
       dispatch(initialize());
     }
   }
@@ -625,7 +630,6 @@ class Widget extends Component {
       // to get new sessionId
       socket.close();
       storage.removeItem(SESSION_NAME);
-      this.initPayload = resetPayload || initPayload;
       this.initializeWidget(true, true);
     }
     else if (restartOnChatReset) {
