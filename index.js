@@ -27,19 +27,6 @@ class RasaWebchatProWithRules extends React.Component {
     this.handleSessionConfirm = this.handleSessionConfirm.bind(this);
   }
 
-  setRef(element) {
-    const { innerRef } = this.props;
-    if (!innerRef) {
-      this.webchatRef = element;
-    } else if (innerRef && innerRef.constructor && innerRef.call && innerRef.apply) {
-      // if this is true, innerRef is a function and thus it's a callback ref
-      this.webchatRef = element;
-      innerRef(element);
-    } else {
-      innerRef.current = element;
-    }
-  }
-
   handleSessionConfirm(sessionObject) {
     const { innerRef } = this.props;
     this.setState({
@@ -59,6 +46,19 @@ class RasaWebchatProWithRules extends React.Component {
         }
       }, 100);
       this.setState({ rulesApplied: true });
+    }
+  }
+
+  setRef(element) {
+    const { innerRef } = this.props;
+    if (!innerRef) {
+      this.webchatRef = element;
+    } else if (innerRef && innerRef.constructor && innerRef.call && innerRef.apply) {
+      // if this is true, innerRef is a function and thus it's a callback ref
+      this.webchatRef = element;
+      innerRef(element);
+    } else {
+      innerRef.current = element;
     }
   }
 
