@@ -80,7 +80,7 @@ export default function (socketUrl, customData, _path, options) {
     } else if (message.type === 'CHAT') {
       const agentMessage = JSON.parse(message.content);
       if (agentMessage instanceof Array) {
-        agentMessage.forEach(message => emitBotUtteredMessage(message))
+        agentMessage.forEach(msg => emitBotUtteredMessage(msg))
       } else {
         emitBotUtteredMessage(agentMessage);
       }
