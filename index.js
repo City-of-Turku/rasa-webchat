@@ -63,10 +63,10 @@ class RasaWebchatProWithRules extends React.Component {
   }
 
   render() {
-    const { onSocketEvent } = this.props;
+    const { onSocketEvent, hideWhenNotConnected, embedded } = this.props;
     let { withRules } = this.props;
     if (withRules === undefined) {
-      withRules = true;
+        withRules = true;
     }
     const { propsRetrieved } = this.state;
     let propsToApply = {};
@@ -74,8 +74,8 @@ class RasaWebchatProWithRules extends React.Component {
     delete propsToApply.rules;
     return (
       <div
-        style={{ display: propsRetrieved ? undefined : 'none' }}
-        className={this.props.embedded || (propsToApply && propsToApply.embedded) ? 'rw-pro-widget-embedded' : ''}
+        style={{ display: (propsRetrieved || !hideWhenNotConnected) ? undefined : 'none' }}
+        className={embedded || (propsToApply && propsToApply.embedded) ? 'rw-pro-widget-embedded' : ''}
       >
         <RasaWebchatPro
           ref={this.setRef}
