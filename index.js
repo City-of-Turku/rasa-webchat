@@ -27,19 +27,6 @@ class RasaWebchatProWithRules extends React.Component {
     this.handleSessionConfirm = this.handleSessionConfirm.bind(this);
   }
 
-  setRef(element) {
-    const { innerRef } = this.props;
-    if (!innerRef) {
-      this.webchatRef = element;
-    } else if (innerRef && innerRef.constructor && innerRef.call && innerRef.apply) {
-      // if this is true, innerRef is a function and thus it's a callback ref
-      this.webchatRef = element;
-      innerRef(element);
-    } else {
-      innerRef.current = element;
-    }
-  }
-
   handleSessionConfirm(sessionObject) {
     const { innerRef } = this.props;
     this.setState({
@@ -62,11 +49,24 @@ class RasaWebchatProWithRules extends React.Component {
     }
   }
 
+  setRef(element) {
+    const { innerRef } = this.props;
+    if (!innerRef) {
+      this.webchatRef = element;
+    } else if (innerRef && innerRef.constructor && innerRef.call && innerRef.apply) {
+      // if this is true, innerRef is a function and thus it's a callback ref
+      this.webchatRef = element;
+      innerRef(element);
+    } else {
+      innerRef.current = element;
+    }
+  }
+
   render() {
-    const { onSocketEvent } = this.props;
+    const { onSocketEvent, hideWhenNotConnected, embedded } = this.props;
     let { withRules } = this.props;
     if (withRules === undefined) {
-      withRules = true;
+        withRules = true;
     }
     const { propsRetrieved } = this.state;
     let propsToApply = {};
@@ -74,8 +74,8 @@ class RasaWebchatProWithRules extends React.Component {
     delete propsToApply.rules;
     return (
       <div
-        style={{ display: propsRetrieved ? undefined : 'none' }}
-        className={this.props.embedded || (propsToApply && propsToApply.embedded) ? 'rw-pro-widget-embedded' : ''}
+        style={{ display: (propsRetrieved || !hideWhenNotConnected) ? undefined : 'none' }}
+        className={embedded || (propsToApply && propsToApply.embedded) ? 'rw-pro-widget-embedded' : ''}
       >
         <RasaWebchatPro
           ref={this.setRef}

@@ -84,14 +84,14 @@
   }
 
   .#{$namespace}loading {
-    background-color: $grey-3;
+    background-color: $grey-4;
     color: $white;
     display: flex;
     flex-direction: column;
     text-align: center;
-    padding: 5px 0 5px;
+    padding: 10px 0 10px;
     font-family: $fontfamily;
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
