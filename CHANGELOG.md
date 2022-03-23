@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://https//github.com/City-of-Turku/rasa-webchat/compare/v1.2.1...v1.2.2) (2022-02-16)
+
+
+### Bug Fixes
+
+* disconnected widget is hidden despite hideWhenNotConnected set to false ([#18](https://https//github.com/City-of-Turku/rasa-webchat/issues/18)) ([2bf3ca2](https://https//github.com/City-of-Turku/rasa-webchat/commit/2bf3ca281cd15e716ff2b26b3d927b94b5ef2790))
+
 ### [1.2.1](https://https//github.com/City-of-Turku/rasa-webchat/compare/v1.2.0...v1.2.1) (2022-02-02)
 
 ## [1.2.0](https://https//github.com/City-of-Turku/rasa-webchat/compare/v1.1.0...v1.2.0) (2022-01-20)
